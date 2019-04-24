@@ -559,6 +559,10 @@ Assembled functions were constructed according to E. Allan (cite project?).
 Correlation plot to justify the groupings
 ```{r}
 source("input_for_2calc.R")
+#TODO : only take either SoilCstock OR SoilOrganicC
+#TODO : make separate file for gap filling, and use raw functions for that! Use before calculating multifunctionalitities!
+#TODO : consider making a file for checking the function's correlations etc.
+#       and think about where to leave this - in synthesis or in the analysis? probably synthesis...
 ```
 
 

@@ -3,6 +3,11 @@ minimult <- raw_functions[, c("beta_Glucosidase", "N_Acetyl_beta_Glucosaminidase
                               "amoA_AOA.2011", "amoA_AOB.2016", "amoA_AOA.2016", "nxrA_NS", "16S_NB", "P_loss2011",
                               "P_loss2015", "PRI", "SoilOrganicC", "Soil.C.stock", "Phosphatase")]
 
+# correlation across the years
+y <- cor(minimult, use="pairwise.complete.obs")
+corrplot::corrplot(y, type="lower",addCoef.col = "black",method="color",diag=F, tl.srt=1, tl.col="black", mar=c(0,0,0,0), number.cex=0.6)
+
+
 # take mean of multi-year-measurements
 minimult[, "amoA_AOB" := apply(minimult[,c("amoA_AOB.2011", "amoA_AOB.2016")],1, mean)]
 minimult[, "amoA_AOA" := apply(minimult[,c("amoA_AOA.2011", "amoA_AOA.2016")],1, mean)]
@@ -52,4 +57,10 @@ plot(network)
 
 
 # pca
+pca_minimult <- prcomp(na.omit(minimult), scale=T)
+# plot(pca_minimult) # 1 very clear component, maybe 4 (cumul to 72%)
+summary(pca_minimult)
 
+library(ggfortify)
+autoplot(pca_minimult, data = na.omit(minimult), loadings = TRUE, loadings.colour = 'black',
+         loadings.label = TRUE, loadings.label.size = 3, colour = "lightgray")
