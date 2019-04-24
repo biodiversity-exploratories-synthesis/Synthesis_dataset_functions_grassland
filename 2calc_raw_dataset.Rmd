@@ -556,6 +556,12 @@ rm(dung.decomposition); rm(dd)
 
 Assembled functions were constructed according to E. Allan (cite project?).
 
+Correlation plot to justify the groupings
+```{r}
+source("input_for_2calc.R")
+```
+
+
 ## soilCflxs
 Enzymes related to soil C. All measured in the year 2011.
 ```{r}
@@ -592,7 +598,6 @@ plc[, "P_loss" := apply(plc[,c("P_loss2011", "P_loss2015")],1, mean)]
 plc[, c("P_loss2011", "P_loss2015") := NULL]
 raw_functions[, "P_loss_comb" := multidiv(plc, sc="sd", cent=TRUE)[,1]]; rm(plc)
 ```
-
 
 
 # store assembled dataset
