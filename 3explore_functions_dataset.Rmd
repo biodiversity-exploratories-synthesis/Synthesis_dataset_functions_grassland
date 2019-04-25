@@ -1,0 +1,53 @@
+---
+title: "3explore_functions_dataset"
+author: "Noelle Schenk"
+date: "April 25, 2019"
+output: html_document
+---
+*note*: 
+This file requires the functions dataset `raw_functions` which is constructed in the previous scripts `1read_raw_dataset.Rmd` and `2calc_raw_dataset.Rmd`. It is an example of how to explore missing data and correlations
+```{r}
+library(naniar)
+```
+
+# Missing data
+```{r}
+vis_miss(raw_functions[, !colnames(raw_functions) %in% c("Explo","Plotn", "Plot"), with=F]) # plot and explo don't contain any missing data
+```
+
+```{r}
+#USER : set treshold for missing values
+treshold <- 0.21
+t <- apply(raw_functions, 2, function(x) sum(is.na(x)))
+exclude <- names(which(t > 150 * treshold))
+
+small_raw_functions <- raw_functions[, !colnames(raw_functions) %in% exclude, with=F]
+```
+Visualisation of new situation
+```{r}
+vis_miss(small_raw_functions[, !colnames(raw_functions) %in% c("Explo","Plotn", "Plot"), with=F])
+```
+
+
+Are there plots which are missing in all variables?
+```{r}
+gg_miss_upset(small_raw_functions)
+```
+
+
+# Correlations
+```{r}
+M <- cor(small_raw_functions[, !colnames(raw_functions) %in% c("Explo","Plotn", "Plot"), with=F], use="pairwise.complete.obs")
+corrplot::corrplot(M,type="lower",addCoef.col = "black",method="color",diag=F, tl.srt=1, tl.col="black", mar=c(1,0,1,0), number.cex=0.6)
+```
+
+Correlations for analysis should not be over a given treshold.
+```{r}
+treshold <- 0.7
+M[M < 0.7 & M > -0.7] <- 0
+corrplot::corrplot(M,type="lower", tl.srt=1, tl.col="black", diag = F, title = "Correlations over 0.7",  mar=c(0,0,2,0))
+```
+High correlations between following variables : 
+- ...
+add reasons for keeping/ removing them.
+
