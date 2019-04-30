@@ -559,7 +559,7 @@ Assembled functions were constructed according to E. Allan (cite project?).
 
 ## Tests for Mini-Multifunc
 The below code contains considerations about the grouping of the mini-multifunctionalities. It appears that some of them do not correlate with each other as expected. 
-```{r}
+```{r, eval=F}
 source("input_for_2calc.R")
 # contains correlation plots, correlation networks and a pca
 ```
