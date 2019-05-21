@@ -1,13 +1,21 @@
 ---
-title: "assembled dataset construction"
-author: "noelle"
-date: "December 5, 2018"
-output: html_document
+title: "Assemble raw dataset for functions - calculations"
+author: "Noelle Schenk, Eric Allan, Caterina Penone"
+date: "May, 2019"
+output: 
+  html_document:
+    toc: true
+    theme: readable
 ---
 # Dependence
 This document depends on `1read_raw_datasets.Rmd` and needs `multidiversity.R`.
 ```{r}
 source("multidiversity.R") # function by E. Allan
+```
+## knit to HTML
+Use the following command to knit:
+```{r, eval=F}
+rmarkdown::render("2calc_raw_dataset.Rmd")
 ```
 
 # Biomass
@@ -205,6 +213,8 @@ list_raw_functions["forage.quality"] <- NULL
 ```
 See in compare_raw_function_to_synthesis for yearly calculation!
 
+# P loss / leaching risk
+Took reverse values so high values represent low loss and therefore high functioning.
 
 # Herbivory
 ## 2013
@@ -244,7 +254,6 @@ ggplot2::ggplot(raw_functions, ggplot2::aes(x=herbivory.2013, y=herbivory.201720
   ggplot2::geom_point(ggplot2::aes(colour = Explo)) +
   ggplot2::geom_smooth(method = "lm", se=F)
 ```
-
 
 
 # Litter.decomposition
@@ -344,6 +353,13 @@ list_raw_functions["nutrients"] <- NULL
 ```
 
 
+# N leaching risk
+year 2015. Multiply by -1 such that high values represent low leaching risk and high functionality of the ecosystem.
+```{r}
+raw_functions[, N_leaching_risk2015 := N_leaching_risk2015 * -1]
+```
+
+
 # pathogen infection
 
 pathogen infection data: 
@@ -357,8 +373,6 @@ plant cover data:
 - multiplied infection severity per plant species with the according plant species cover on each plot separately.
 
 ```{r}
-#TODO : proofread
-
 pat <- list_raw_functions$pathogen.infection
 npla <- list_raw_functions$plant.cover
 list_raw_functions["plant.cover"] <- NULL
@@ -591,16 +605,20 @@ rm(nce)
 ```
 
 ## P_loss_comb
-combination of PRI and P_loss.
+combination of PRI and P_loss/ P_leaching risk.
 
-mean of P_loss 2011 and 2015.
-```{r}
-plc <- raw_functions[, c("P_loss2011", "P_loss2015", "PRI")]
-# take mean of P_loss 2011 and 2015
-plc[, "P_loss" := apply(plc[,c("P_loss2011", "P_loss2015")],1, mean)]
-plc[, c("P_loss2011", "P_loss2015") := NULL]
+PRI was measured in 2014 and is not correlated with the P_loss measures. Therefore, this is not calculated here.
+```{r, eval=F}
+plc <- raw_functions[, c("P_loss2011", "P_leaching_risk2015", "PRI")]
+# take mean of P_loss 2011 and leaching risk 2015
+plc[, "P_loss" := apply(plc[,c("P_loss2011", "P_leaching_risk2015")],1, mean)]
+plc[, c("P_loss2011", "P_leaching_risk2015") := NULL]
 raw_functions[, "P_loss_comb" := multidiv(plc, sc="sd", cent=TRUE)[,1]]; rm(plc)
 ```
+
+
+## N_loss_comb
+Could be calculated as P_loss_comb, if NRI and N loss (or N leaching risk) were measured in the same year.
 
 
 # store assembled dataset

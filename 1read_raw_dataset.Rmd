@@ -1,7 +1,7 @@
 ---
-title: "Assemble raw dataset for functions"
+title: "Assemble raw dataset for functions - read in datasets"
 author: "Noelle Schenk, Eric Allan, Caterina Penone"
-date: "April, 2019"
+date: "May, 2019"
 output:
   html_document:
     toc: true
@@ -17,7 +17,11 @@ output:
 This file should run automatically, the user needs to change/ take an action at lines starting with "#USER". This file loads the datasets from BExIS and is the prerequisite for "2calc_raw_dataset.Rmd". The latter calculates (if needed) the functions from the loaded variables.
 
 ## Knit to HTML
-In order to knit this document to HTML, the file "nonpublic.R" needs to be run, or the variables `pathtodata` and `info_data` need to be given (see below why and how).
+In order to knit this document to HTML, the file "nonpublic.R" needs to be run, or the variables `pathtodata` and `info_data` need to be given (see below why and how). Use the following command to knit:
+```{r, eval=F}
+rmarkdown::render("1read_raw_dataset.Rmd")
+```
+
 
 # Loading raw data
 An overview of the data is given in "info_data.csv". From there, the path of data files can be read out. 
@@ -262,6 +266,21 @@ raw_functions <- merge(raw_functions, nutrients, by="Plot", all=T)
 rm(nutrients); rm(nutrients2009); rm(nutrients2010); rm(nutrients2011); rm(nutrients2012); rm(nutrients2013); rm(nutrients2014)
 ```
 
+# Potential nitrification
+Abundance of nitrogen fixing microbes and ammonia oxidizers. abundance and activity of nitrogen fixing microbes and ammonia oxidizing bacteria and archaea.
+
+potential nitrification is determined according to Hoffmann et al, 2007. [ngN / g DW soil / h]
+
+year is not clear, but most probably 2011. start date is 1.9.2011, end date is 30.01.2013.
+
+```{r}
+# 2011
+Potential.nitrification <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Potential.nitrification2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Potential.nitrification <- Potential.nitrification[,c("PlotID", "pot_nitrification")]
+data.table::setnames(Potential.nitrification, old=c("PlotID", "pot_nitrification"), new=c("Plot", "Potential.nitrification2011"))
+raw_functions <- merge(raw_functions, Potential.nitrification, by="Plot", all=T); rm(Potential.nitrification)
+```
+
 
 # NRI - Nitrogen retention index
 requires : Bulk.density2014, Nshoot.2014, NH4.2014, NO3.2014, Biomass2014, Nmic.2014
@@ -270,16 +289,8 @@ Most of these datasets are already read in in this script - only Nmic.2014 needs
 
 ## Nmic 2014
 ```{r}
-#TODO : there is a problem with the columns. If dataset is read in, the Nmic column only contains NA.
-# there are (too much?) many tabs in the .txt data file.
-# 24 column names and 24 columns, - but not enough column content to fill those contents!
-# Report that problem?
-# after the NAs, there is a column which is the ratio of the previous 2 columns... could that be Nmic and Cmic?
-# should be confirmed!!
-# wahrscheinlich nur bis a15_0 eingelesen, denn letzte spalte sieht nicht aus wie summe!
-# assuming that, take 5th column with data.
 Nmic.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nmic.2014", info_data$ColumnName)], sep=""), header=T)
-data.table::setnames(Nmic.2014, old=c("EP_Plot_ID", "fungi"), new=c("Plot", "Nmic.2014"))
+data.table::setnames(Nmic.2014, old=c("EP_Plot_ID", "Nmic"), new=c("Plot", "Nmic.2014"))
 raw_functions <- merge(raw_functions, Nmic.2014[, c("Plot", "Nmic.2014")], by="Plot", all=T); rm(Nmic.2014)
 ```
 
@@ -288,9 +299,36 @@ Within the soil sampling campaign 2011 all samples are taken in the beginning of
 
 ```{r}
 Nmic.2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nmic.2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
-Nmic.2011 <- Nmic.2011[,c("EP_Plot_ID", "Microbial_nitrogen")]
-data.table::setnames(Nmic.2011, old=c("EP_Plot_ID", "Microbial_nitrogen"), new=c("Plot", "Nmic.2011"))
+Nmic.2011 <- Nmic.2011[,c("EP_Plot_ID", "Nmic")]
+data.table::setnames(Nmic.2011, old=c("EP_Plot_ID", "Nmic"), new=c("Plot", "Nmic.2011"))
 raw_functions <- merge(raw_functions, Nmic.2011, by="Plot", all=T); rm(Nmic.2011)
+```
+
+
+# NH4 and NO3 2014 - Potential nitrification 2
+potential nitrification is measured and NH4 as well as NO3 content is determined.
+
+bdl : below detection limit
+
+11 Plots are measured twice : "SEG40" "SEG41" "SEG42" "SEG43" "SEG44" "SEG45" "SEG46" "SEG47" "SEG48" "SEG49" "SEG50". 
+Like in synthesis dataset, the first measure only is taken.
+
+NH4 : µg / g DW soil, Ammonium ; NO3 : mg / g DW soil, Nitrate
+```{r}
+# 2014
+NH4.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("NH4.2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+NH4.2014 <- NH4.2014[grep("G", NH4.2014$Plot_ID), c("Plot_ID", "NH4", "NO3", "PNR")]
+# show duplicates, uncomment if want to see them
+# NH4.2014[NH4.2014$Plot_ID %in% NH4.2014[duplicated(NH4.2014$Plot_ID), Plot_ID]]
+# filter out second duplicate.
+NH4.2014 <- NH4.2014[!which(duplicated(NH4.2014$Plot_ID)),]
+# translate "bdl" (below detection limit) to "0.000000" as in synthesis dataset. 
+# "nd" (not detectable) is automatically translated to NA
+NH4.2014$NH4 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NH4))
+NH4.2014$NO3 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NO3))
+NH4.2014$PNR <- as.numeric(sub("bdl", "0.000000", NH4.2014$PNR))
+data.table::setnames(NH4.2014, old=c("Plot_ID", "NH4", "NO3", "PNR"), new=c("Plot", "NH4.2014", "NO3.2014", "Potential.nitrification2014"))
+raw_functions <- merge(raw_functions, NH4.2014, by="Plot", all=T); rm(NH4.2014)
 ```
 
 
@@ -315,6 +353,19 @@ Bulk.density2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("
 Bulk.density2014 <- Bulk.density2014[, c("EP_Plot_ID", "Bulk_density")]
 data.table::setnames(Bulk.density2014, old = c("EP_Plot_ID", "Bulk_density"), new = c("Plot", "Bulk.density2014"))
 raw_functions <- merge(raw_functions, Bulk.density2014, by="Plot", all=T); rm(Bulk.density2014)
+```
+
+# N leaching risk
+Year 2015. Formal : N_loss2009 and Nitrate_Ammonium_loss, had been named to the wrong year. 
+
+Renamed to leaching risk, because it does not measure leached N (e.g. in the groundwater), but the N concentration in siol water in the subsoil. Thus, it rather measures the risk of leaching than what actually already leaked.
+
+Combines ammonium and nitrate potential loss.
+```{r}
+N_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("N_leaching_risk2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
+data.table::setnames(N_leaching_risk2015, old = c("Usefull_PlotID", "Mean_N_Sum"), new = c("Plot", "N_leaching_risk2015"))
+N_leaching_risk2015 <- N_leaching_risk2015[, c("Plot", "N_leaching_risk2015")]
+raw_functions <- merge(raw_functions, N_leaching_risk2015, by = "Plot", all = T) ; rm(N_leaching_risk2015)
 ```
 
 
@@ -359,7 +410,7 @@ raw_functions <- merge(raw_functions, herb[,c("Plot", "herbivory.20172018")], by
 ```
 
 
-# Phosphorous loss
+# Phosphorous leaching risk
 measures phoshporous that is not stored in plants or microbes.
 
 Resin refers to the method of phosphorous measurement in soil: small bags with filled with resin: a granular material onto which nutrients are adsorbed that comes into contact with the material. These bags are incubated at a certain depth in order that all nutrients that are in solution around the bags is caught in the bag. After incubation, nitrate is detached from the resin and the concentrations are measured.
@@ -377,14 +428,15 @@ raw_functions <- merge(raw_functions, P_loss2011, by="Plot", all=T); rm(P_loss20
 ```
 
 ## 2015
+Different method than 2011, different data owners.
 [µg/g Resin] 	
 ```{r}
-P_loss2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("P_loss2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
-P_loss2015 <- P_loss2015[,c("Plot", "Mean_P")]
-data.table::setnames(P_loss2015, old=c("Mean_P"), new=c("P_loss2015"))
+P_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("P_leaching_risk2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
+P_leaching_risk2015 <- P_leaching_risk2015[,c("Plot", "Mean_P")]
+data.table::setnames(P_leaching_risk2015, old=c("Mean_P"), new=c("P_leaching_risk2015"))
 # take reverse values so high values represent low loss
-P_loss2015[, P_loss2015 := (max(P_loss2015, na.rm=T) - P_loss2015)]
-raw_functions <- merge(raw_functions, P_loss2015, by="Plot", all=T); rm(P_loss2015)
+P_leaching_risk2015[, P_leaching_risk2015 := (max(P_leaching_risk2015, na.rm=T) - P_leaching_risk2015)]
+raw_functions <- merge(raw_functions, P_leaching_risk2015, by="Plot", all=T); rm(P_leaching_risk2015)
 ```
 
 
@@ -399,49 +451,6 @@ beta_Glucosidase [nmol MUF g-1 h-1], Xylosidase [nmol MUF g-1 h-1], N_Acetyl_bet
 microbial_enzyme_activities <- data.table::fread(paste(pathtodata, info_data$subpath[grep("beta_Glucosidase", info_data$ColumnName)], sep=""), header=T, sep='\t', drop=c("Exploratory", "Year"))
 data.table::setnames(microbial_enzyme_activities, old=c("EP_Plot_ID","DEA_with_C2H2"), new=c("Plot", "DEA"))
 raw_functions <- merge(raw_functions, microbial_enzyme_activities, by="Plot", all=T); rm(microbial_enzyme_activities)
-```
-
-
-# Potential nitrification
-Abundance of nitrogen fixing microbes and ammonia oxidizers. abundance and activity of nitrogen fixing microbes and ammonia oxidizing bacteria and archaea.
-
-potential nitrification is determined according to Hoffmann et al, 2007. [ngN / g DW soil / h]
-
-year is not clear, but most probably 2011. start date is 1.9.2011, end date is 30.01.2013.
-
-```{r}
-# 2011
-Potential.nitrification <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Potential.nitrification2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
-Potential.nitrification <- Potential.nitrification[,c("PlotID", "pot_nitrification")]
-data.table::setnames(Potential.nitrification, old=c("PlotID", "pot_nitrification"), new=c("Plot", "Potential.nitrification2011"))
-raw_functions <- merge(raw_functions, Potential.nitrification, by="Plot", all=T); rm(Potential.nitrification)
-```
-
-
-# NH4 and NO3 2014 - Potential nitrification 2
-potential nitrification is measured and NH4 as well as NO3 content is determined.
-
-bdl : below detection limit
-
-11 Plots are measured twice : "SEG40" "SEG41" "SEG42" "SEG43" "SEG44" "SEG45" "SEG46" "SEG47" "SEG48" "SEG49" "SEG50". 
-Like in synthesis dataset, the first measure only is taken.
-
-NH4 : µg / g DW soil, Ammonium ; NO3 : mg / g DW soil, Nitrate
-```{r}
-# 2014
-NH4.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("NH4.2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
-NH4.2014 <- NH4.2014[grep("G", NH4.2014$Plot_ID), c("Plot_ID", "NH4", "NO3", "PNR")]
-# show duplicates, uncomment if want to see them
-# NH4.2014[NH4.2014$Plot_ID %in% NH4.2014[duplicated(NH4.2014$Plot_ID), Plot_ID]]
-# filter out second duplicate.
-NH4.2014 <- NH4.2014[!which(duplicated(NH4.2014$Plot_ID)),]
-# translate "bdl" (below detection limit) to "0.000000" as in synthesis dataset. 
-# "nd" (not detectable) is automatically translated to NA
-NH4.2014$NH4 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NH4))
-NH4.2014$NO3 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NO3))
-NH4.2014$PNR <- as.numeric(sub("bdl", "0.000000", NH4.2014$PNR))
-data.table::setnames(NH4.2014, old=c("Plot_ID", "NH4", "NO3", "PNR"), new=c("Plot", "NH4.2014", "NO3.2014", "Potential.nitrification2014"))
-raw_functions <- merge(raw_functions, NH4.2014, by="Plot", all=T); rm(NH4.2014)
 ```
 
 
