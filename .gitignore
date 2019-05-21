@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 2019_grassland_functions.Rproj
+*.html
+*.csv
