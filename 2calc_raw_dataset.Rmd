@@ -354,10 +354,7 @@ list_raw_functions["nutrients"] <- NULL
 
 
 # N leaching risk
-year 2015. Multiply by -1 such that high values represent low leaching risk and high functionality of the ecosystem.
-```{r}
-raw_functions[, N_leaching_risk2015 := N_leaching_risk2015 * -1]
-```
+Took reverse such that high values represent low leaching risk and therefore high functioning.
 
 
 # pathogen infection

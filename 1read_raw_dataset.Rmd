@@ -365,6 +365,8 @@ Combines ammonium and nitrate potential loss.
 N_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("N_leaching_risk2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
 data.table::setnames(N_leaching_risk2015, old = c("Usefull_PlotID", "Mean_N_Sum"), new = c("Plot", "N_leaching_risk2015"))
 N_leaching_risk2015 <- N_leaching_risk2015[, c("Plot", "N_leaching_risk2015")]
+# take reverse values so high values represent low loss
+N_leaching_risk2015[, N_leaching_risk2015 := (max(N_leaching_risk2015, na.rm=T) - N_leaching_risk2015)]
 raw_functions <- merge(raw_functions, N_leaching_risk2015, by = "Plot", all = T) ; rm(N_leaching_risk2015)
 ```
 
