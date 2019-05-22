@@ -248,6 +248,10 @@ Dataset collection differed between them. They do not correlate and their range 
 m <- lm(raw_functions$herbivory.2013 ~ raw_functions$herbivory.20172018)
 summary(m)
 ```
+```{r}
+rm(m)
+```
+
 
 ```{r}
 ggplot2::ggplot(raw_functions, ggplot2::aes(x=herbivory.2013, y=herbivory.20172018)) +
@@ -393,7 +397,7 @@ rm(pat); rm(tot.infect)
 ```
 
 ### Plant abbreviations reference table.
-```{r, results="hide"}
+```{r, message = F}
 ### generate plant name reference table from npla and p.infect
 # to find back host species in plant cover data
 Speciesref <-unique(npla$Species)

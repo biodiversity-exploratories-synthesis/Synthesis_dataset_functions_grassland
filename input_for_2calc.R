@@ -1,7 +1,7 @@
 minimult <- raw_functions[, c("beta_Glucosidase", "N_Acetyl_beta_Glucosaminidase", "Xylosidase", "Urease", "DEA",
                               "Potential.nitrification2011", "Potential.nitrification2014","nifH","amoA_AOB.2011",
                               "amoA_AOA.2011", "amoA_AOB.2016", "amoA_AOA.2016", "nxrA_NS", "16S_NB", "P_loss2011",
-                              "P_loss2015", "PRI", "SoilOrganicC", "Soil.C.stock", "Phosphatase")]
+                              "P_leaching_risk2015", "PRI", "SoilOrganicC", "Soil.C.stock", "Phosphatase")]
 
 # correlation across the years
 y <- cor(minimult, use="pairwise.complete.obs")
@@ -19,8 +19,9 @@ minimult[, c("P_loss2011", "P_loss2015") := NULL]
 # correlations
 M <- cor(minimult, use="pairwise.complete.obs")
 
-corrplot::corrplot(M,type="lower",addCoef.col = "black",method="color",diag=F, tl.srt=1, tl.col="black", mar=c(0,0,0,0), number.cex=0.6)
-corrplot::corrplot(M, type = "upper", tl.col="black", tl.srt=40)
+corrplot::corrplot(M,type="lower",addCoef.col = "black",method="color",diag=F, tl.srt=1, tl.col="black", mar=c(0,0,0,0), 
+                   number.cex=0.6, order = "hclust")
+corrplot::corrplot(M, type = "upper", tl.col="black", tl.srt=40, order = "hclust")
 
 highM <- M
 highM[M < 0.6 & M > -0.6] <- 0
