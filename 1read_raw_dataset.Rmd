@@ -615,25 +615,6 @@ data.table::setnames(nit2011, old=c("PlotID", "amoA_AOA", "amoA_AOB"), new=c("Pl
 raw_functions <- merge(raw_functions, nit2011[, c("Plot", "amoA_AOA.2011", "amoA_AOB.2011", "nifH")], by="Plot", all=T) ; rm(nit2011)
 ```
 
-# soil depth
-using soil depth from assembled, local data. Assembled by Eric Allan, who assembled it from dataset 5340 (as indicated in synthesis dataset 21688).
-```{r}
-soil.depth <- data.table::fread(paste(pathtodata, info_data$subpath[grep("soil.depth", info_data$ColumnName)], sep=""), header=T, sep=',')
-data.table::setnames(soil.depth, old="Plot", new="Plotn")
-raw_functions <- merge(raw_functions, soil.depth[,c("Plotn","soil.depth")], by="Plotn", all = T); rm(soil.depth)
-```
-
-# pH
-2 measures per site.
-```{r}
-ph <- data.table::fread(paste(pathtodata, info_data$subpath[grep("PH", info_data$ColumnName)], sep=""), header=T, sep='\t')
-ph <- ph[Type == "G", c("EP_Plotid", "pH_1", "pH_2")]
-ph[,"PH"] <- apply(ph[, c("pH_1", "pH_2")], 1, mean, na.rm=T)
-data.table::setnames(ph, old="EP_Plotid", new="Plot")
-raw_functions <- merge(raw_functions, ph[,c("Plot","PH")], by="Plot", all=T); rm(ph)
-```
-
-
 
 # Code to load, but not included
 Below: code to load or starting to load Flower cover, forage quality and charismatic butterfly. Not finished because not included in functions dataset.
