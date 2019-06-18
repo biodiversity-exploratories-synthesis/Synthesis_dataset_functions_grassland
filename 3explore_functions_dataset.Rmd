@@ -12,7 +12,7 @@ library(naniar)
 
 # Missing data
 ```{r}
-vis_miss(raw_functions[, !colnames(raw_functions) %in% c("Explo","Plotn", "Plot"), with=F]) # plot and explo don't contain any missing data
+vis_miss(raw_functions[, !colnames(raw_functions) %in% c("Explo","Plotn", "Plot"), with=F], sort_miss = T) # plot and explo don't contain any missing data
 ```
 
 ```{r}
@@ -33,7 +33,6 @@ Are there plots which are missing in all variables?
 ```{r}
 gg_miss_upset(small_raw_functions)
 ```
-
 
 # Correlations
 ```{r}

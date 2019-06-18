@@ -313,7 +313,7 @@ Phosphorus retention (PRI): Pmic (15766; microbial phosphorus in soil), PlantP.c
 
 *2014* : Pmic.2014, Pshoot.2014, Biomass2014, Bulk.density2014
 
-*2011* : ?
+*2011* : can be calculated if we use olsen p from 2009
 
 $$PRI = \frac{microbial Phosphorous + plant shoot Phosphorous}{microbial Phosphorous + plant shoot Phosphorous + soil Phosphorous}$$
 where 
@@ -337,6 +337,38 @@ rPRI[, "PRI" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)
 raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI")], by = "Plot", all = T)
 rm(rPRI); rm(nutrients)
 ```
+
+```{r, eval=T}
+# 2011 / 2009
+rPRI <- raw_functions[, c("Plot", "Pmic.2011", "Bulk.density2011", "NaHCO3_Pi", "Biomass2011")]
+nutrients <- list_raw_functions$nutrients
+nutrients <- nutrients[, c("Plot", "Pshoot.2011")]
+rPRI <- merge(rPRI, nutrients, by = "Plot", all = T)
+
+rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 100000)]
+rPRI[, "soilPstock" := (NaHCO3_Pi / 1000000) * (Bulk.density2011 * 100000)]
+rPRI[, "plantPstock" := Pshoot.2011 * Biomass2011]
+rPRI[, "PRI.2011" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
+raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot", all = T)
+rm(rPRI); rm(nutrients)
+```
+
+```{r, eval=F}
+# alternative : using Biomass and Pshoot from 2009 as well
+# 2011 / 2009
+rPRI <- raw_functions[, c("Plot", "Pmic.2011", "Bulk.density2011", "OlsenPi2014", "Biomass2009")]
+nutrients <- list_raw_functions$nutrients
+nutrients <- nutrients[, c("Plot", "Pshoot.2009")]
+rPRI <- merge(rPRI, nutrients, by = "Plot", all = T)
+
+rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 100000)]
+rPRI[, "soilPstock" := (OlsenPi2014 / 1000000) * (Bulk.density2011 * 100000)]
+rPRI[, "plantPstock" := Pshoot.2009 * Biomass2009]
+rPRI[, "PRI.2011" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
+raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot", all = T)
+rm(rPRI); rm(nutrients)
+```
+
 
 # NRI - Nitrogen retention index
 requires : Bulk.density2014, Nshoot.2014, NH4.2014, NO3.2014, Biomass2014, Nmic.2014
@@ -379,7 +411,7 @@ npla <- list_raw_functions$plant.cover
 list_raw_functions["plant.cover"] <- NULL
 list_raw_functions["pathogen.infection"] <- NULL
 
-tot.infect <- with(pat, perc_plants_infected*perc_infection_severity)/10000   ### calculate infection as prop plants infected x mean severity of infection per plant
+tot.infect <- with(pat, p.plants.infect*p.severity)/10000   ### calculate infection as prop plants infected x mean severity of infection per plant
 
 ##### SB only identified Poa to genus, so need to combine Poas in Barbara data
 # aggregate all Poa from same plots
