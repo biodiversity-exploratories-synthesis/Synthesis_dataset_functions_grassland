@@ -374,14 +374,16 @@ rm(rPRI); rm(nutrients)
 requires : Bulk.density2014, Nshoot.2014, NH4.2014, NO3.2014, Biomass2014, Nmic.2014
 
 Most of these datasets are already read in in this script. Nshoot is stored in `list_raw_functions` "nutrients". Only Nmic.2014 needs to be read in.
+
+Note that all variables need to be converted to a unit of [g/m3].
 ```{r}
 nridat <- raw_functions[,c("Plot", "Bulk.density2014", "NH4.2014", "NO3.2014", "Biomass2014", "Nmic.2014")]
 Nshoot.2014 <- list_raw_functions$nutrients
 Nshoot.2014 <- Nshoot.2014[, c("Plot", "Nshoot.2014")]
 nridat <- merge(nridat, Nshoot.2014, by="Plot", all = T); rm(Nshoot.2014)
 
-nridat[, "micNstock":= (Nmic.2014 / 1000000)*(Bulk.density2014 * 100000)]
-nridat[, "soilNstock" := ((NH4.2014 + NO3.2014) / 1000000) * (Bulk.density2014 * 100000)]
+nridat[, "micNstock":= (Nmic.2014 / 1000000)*(Bulk.density2014 * 1000000)]
+nridat[, "soilNstock" := ((NH4.2014 + NO3.2014) / 1000000) * (Bulk.density2014 * 1000000)]
 nridat[, "plantNstock" := Nshoot.2014 * Biomass2014]
 nridat[, "NRI" := (micNstock + plantNstock)/(micNstock + plantNstock + soilNstock)]
 raw_functions <- merge(raw_functions, nridat[,c("Plot", "NRI")], by = "Plot", all = T) ; rm(nridat)
