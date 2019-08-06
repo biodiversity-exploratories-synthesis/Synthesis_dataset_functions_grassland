@@ -578,18 +578,20 @@ raw_functions <- merge(raw_functions, pathogen.infection, by="Plotn", all=T) ; r
 rm(pla_reftable); rm(npla); rm(p.infect); rm(pinf)
 ```
 
-# dung decomposition
+# dung removal
+old name : dung decomposition
+
 Taking the mean over all 5 dung types for each plot. Dung removal in g and not in %, because the treatments (dung types) were (almost) the same in all plots and can therefore be compared.
 ```{r}
-dung.decomposition <- list_raw_functions[["dung.decomposition"]]
+dung.removal <- list_raw_functions[["dung.removal"]]
 # scale values for dungtype to be able to combine different dungtypes
-dung.decomposition[, scaled_removal_g := lapply(.SD, function(x) as.vector(scale(x))), by = dungtype, .SDcols = "removal_g"]
-dd <- data.table::copy(dung.decomposition)
+dung.removal[, scaled_removal_g := lapply(.SD, function(x) as.vector(scale(x))), by = dungtype, .SDcols = "removal_g"]
+dd <- data.table::copy(dung.removal)
 
-dung.decomposition <- aggregate(scaled_removal_g~EP, dung.decomposition, mean)
-data.table::setnames(dung.decomposition, old = c("EP", "scaled_removal_g"), new=c("Plot", "dung.decomposition"))
-raw_functions <- merge(raw_functions, dung.decomposition, by = "Plot", all = T)
-list_raw_functions["dung.decomposition"] <- NULL
+dung.removal <- aggregate(scaled_removal_g~EP, dung.removal, mean)
+data.table::setnames(dung.removal, old = c("EP", "scaled_removal_g"), new=c("Plot", "dung.removal"))
+raw_functions <- merge(raw_functions, dung.removal, by = "Plot", all = T)
+list_raw_functions["dung.removal"] <- NULL
 ```
 
 graphical representation
@@ -598,7 +600,7 @@ ggplot2::ggplot(data = dd, ggplot2::aes(x = removal_g, y = scaled_removal_g, col
   ggplot2::geom_point() + 
   ggplot2::scale_color_brewer(palette="Set1")
 
-rm(dung.decomposition); rm(dd)
+rm(dung.removal); rm(dd)
 ```
 
 # calc combined functions "mini- multifunctionalities"
