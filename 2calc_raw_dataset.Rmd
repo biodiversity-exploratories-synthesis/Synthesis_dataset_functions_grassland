@@ -266,8 +266,8 @@ litter bag approach, Mass loss in the litter bags, after two months, and four mo
 Litter.decomposition <- list_raw_functions$Litter.decomposition
 # take the mean daily decomposition rate over all measures, the ones with 2 months and the ones with 4 months decomposition.
 Litter.decomposition <- aggregate(DailyDecompositionRate~EPPlotID, Litter.decomposition, mean)
-data.table::setnames(Litter.decomposition, old=c("EPPlotID", "DailyDecompositionRate"), new=c("Plot", "Litter.decomposition"))
-raw_functions <- merge(raw_functions, Litter.decomposition, by="Plot", all.x = T) ; rm(Litter.decomposition)
+data.table::setnames(Litter.decomposition, old=c("EPPlotID", "DailyDecompositionRate"), new=c("Plotn", "Litter.decomposition"))
+raw_functions <- merge(raw_functions, Litter.decomposition, by="Plotn", all.x = T); rm(Litter.decomposition)
 list_raw_functions["Litter.decomposition"] <- NULL
 ```
 
@@ -677,10 +677,11 @@ combination of PRI and P_loss/ P_leaching risk.
 
 PRI was measured in 2014 and is not correlated with the P_loss measures. Therefore, this is not calculated here.
 ```{r, eval=F}
-plc <- raw_functions[, c("P_loss2011", "P_leaching_risk2015", "PRI")]
+plc <- raw_functions[, c("P_loss2011", "P_leaching_risk2015", "PRI", "PRI.2011")]
 # take mean of P_loss 2011 and leaching risk 2015
 plc[, "P_loss" := apply(plc[,c("P_loss2011", "P_leaching_risk2015")],1, mean)]
-plc[, c("P_loss2011", "P_leaching_risk2015") := NULL]
+plc[, "PRI1" := apply(plc[, c("PRI", "PRI.2011")], 1, mean)]
+plc[, c("P_loss2011", "P_leaching_risk2015", "PRI", "PRI.2011") := NULL]
 raw_functions[, "P_loss_comb" := multidiv(plc, sc="sd", cent=TRUE)[,1]]; rm(plc)
 ```
 
