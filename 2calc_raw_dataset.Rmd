@@ -317,9 +317,9 @@ Phosphorus retention (PRI): Pmic (15766; microbial phosphorus in soil), PlantP.c
 
 $$PRI = \frac{microbial Phosphorous + plant shoot Phosphorous}{microbial Phosphorous + plant shoot Phosphorous + soil Phosphorous}$$
 where 
-$$microbial Phosphorous = (Pmic (mg/kg) / 1000000) * (bulk density (g/cm^3) * 100000 cm^3/ m^2)$$
+$$microbial Phosphorous = (Pmic (mg/kg) / 1000000) * (bulk density (g/cm^3) * 1000000 cm^3/ m^3)$$
 $$plant shoot P = Pshoot (\%) * Biomass (g/m^2) $$
-$$soil P  = \frac{Olsen Pi (mg/kg)}{1000000} * (bulk density (g/cm^3) * 100000 cm^3/ m^2)$$
+$$soil P  = \frac{Olsen Pi (mg/kg)}{1000000} * (bulk density (g/cm^3) * 1000000 cm^3/ m^3)$$
 
 ```{r}
 # 2014
@@ -330,8 +330,8 @@ nutrients <- list_raw_functions$nutrients
 nutrients <- nutrients[, c("Plot", "Pshoot.2014")]
 rPRI <- merge(rPRI, nutrients, by="Plot", all=T)
 
-rPRI[, "micPstock":= (Pmic.2014 / 1000000)*(Bulk.density2014 * 100000)]
-rPRI[, "soilPstock" := (OlsenPi2014 / 1000000) * (Bulk.density2014 * 100000)]
+rPRI[, "micPstock":= (Pmic.2014 / 1000000)*(Bulk.density2014 * 1000000)]
+rPRI[, "soilPstock" := (OlsenPi2014 / 1000000) * (Bulk.density2014 * 1000000)]
 rPRI[, "plantPstock" := Pshoot.2014 * Biomass2014]
 rPRI[, "PRI" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
 raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI")], by = "Plot", all = T)
@@ -345,8 +345,8 @@ nutrients <- list_raw_functions$nutrients
 nutrients <- nutrients[, c("Plot", "Pshoot.2011")]
 rPRI <- merge(rPRI, nutrients, by = "Plot", all = T)
 
-rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 100000)]
-rPRI[, "soilPstock" := (NaHCO3_Pi / 1000000) * (Bulk.density2011 * 100000)]
+rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 1000000)]
+rPRI[, "soilPstock" := (NaHCO3_Pi / 1000000) * (Bulk.density2011 * 1000000)]
 rPRI[, "plantPstock" := Pshoot.2011 * Biomass2011]
 rPRI[, "PRI.2011" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
 raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot", all = T)
@@ -361,8 +361,8 @@ nutrients <- list_raw_functions$nutrients
 nutrients <- nutrients[, c("Plot", "Pshoot.2009")]
 rPRI <- merge(rPRI, nutrients, by = "Plot", all = T)
 
-rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 100000)]
-rPRI[, "soilPstock" := (OlsenPi2014 / 1000000) * (Bulk.density2011 * 100000)]
+rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 1000000)]
+rPRI[, "soilPstock" := (OlsenPi2014 / 1000000) * (Bulk.density2011 * 1000000)]
 rPRI[, "plantPstock" := Pshoot.2009 * Biomass2009]
 rPRI[, "PRI.2011" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
 raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot", all = T)
