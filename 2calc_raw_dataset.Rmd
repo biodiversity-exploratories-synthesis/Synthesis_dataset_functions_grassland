@@ -369,6 +369,13 @@ raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot",
 rm(rPRI); rm(nutrients)
 ```
 
+# PRIcomb
+combine years 2011/2009 and 2014
+```{r}
+raw_functions[, "PRIcomb" := apply(raw_functions[, c("PRI", "PRI.2011")], 1, function(x) mean(x, na.rm = T))]
+raw_functions[is.nan(PRIcomb), PRIcomb := NA]
+```
+
 
 # NRI - Nitrogen retention index
 requires : Bulk.density2014, Nshoot.2014, NH4.2014, NO3.2014, Biomass2014, Nmic.2014
@@ -688,10 +695,16 @@ plc[, c("P_loss2011", "P_leaching_risk2015", "PRI", "PRI.2011") := NULL]
 raw_functions[, "P_loss_comb" := multidiv(plc, sc="sd", cent=TRUE)[,1]]; rm(plc)
 ```
 
+# P leaching risk comb
+In case PRI and P_loss are not combined to P_loss_comb, the two years or P leaching risk are combined here.
+```{r}
+raw_functions[, "P_leaching_risk_comb" := apply(raw_functions[,c("P_loss2011", "P_leaching_risk2015")],1, function(x) mean(x, na.rm = T))]
+raw_functions[is.nan(P_leaching_risk_comb), P_leaching_risk_comb := NA]
+```
+
 
 ## N_loss_comb
 Could be calculated as P_loss_comb, if NRI and N loss (or N leaching risk) were measured in the same year.
-
 
 # store assembled dataset
 clean unneeded variables
