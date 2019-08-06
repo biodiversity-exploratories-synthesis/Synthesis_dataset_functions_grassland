@@ -340,13 +340,13 @@ rm(rPRI); rm(nutrients)
 
 ```{r, eval=T}
 # 2011 / 2009
-rPRI <- raw_functions[, c("Plot", "Pmic.2011", "Bulk.density2011", "NaHCO3_Pi", "Biomass2011")]
+rPRI <- raw_functions[, c("Plot", "Pmic.2011", "Bulk.density2011", "NaHCO3.Pi", "Biomass2011")]
 nutrients <- list_raw_functions$nutrients
 nutrients <- nutrients[, c("Plot", "Pshoot.2011")]
 rPRI <- merge(rPRI, nutrients, by = "Plot", all = T)
 
 rPRI[, "micPstock" := (Pmic.2011 / 1000000)*(Bulk.density2011 * 1000000)]
-rPRI[, "soilPstock" := (NaHCO3_Pi / 1000000) * (Bulk.density2011 * 1000000)]
+rPRI[, "soilPstock" := (NaHCO3.Pi / 1000000) * (Bulk.density2011 * 1000000)]
 rPRI[, "plantPstock" := Pshoot.2011 * Biomass2011]
 rPRI[, "PRI.2011" := (micPstock + plantPstock)/(micPstock + plantPstock + soilPstock)]
 raw_functions <- merge(raw_functions, rPRI[,c("Plot", "PRI.2011")], by = "Plot", all = T)
@@ -669,7 +669,9 @@ calculating mini-multifunctionality of both groups
 ```{r}
 raw_functions[, "soilAmmoniaflxs" := multidiv(nce_a[, !"Plotn", with=F], sc="sd", cent=T)[,1]]
 raw_functions[, "soilNitrateflxs" := multidiv(nce_n[, !"Plotn", with=F], sc="sd", cent=T)[,1]]
-
+# also calculate full soilNflxs
+nce <- merge(nce_a, nce_n, by = "Plotn", all = T)
+raw_functions[, "soilNflxs" := multidiv(nce[, !"Plotn", with=F], sc = "sd", cent = T)[,1]]
 rm(nce_n); rm(nce_a); rm(nce)
 ```
 
@@ -704,7 +706,7 @@ cat("Dear user, \n
     It will be used for the assembled functions dataset.\n
     The dataset will be printed on your Desktop with the prefix you have given together with the following suffix :\n
     '_raw_functions_dataset.csv' \n
-    example : 'december2018' would give 'december2018__raw_functions_dataset.csv'")
+    example : 'december2019' would give 'december2019_raw_functions_dataset.csv'")
 prefix <- readline(prompt="Write now : ")
 #USER : change ~/Desktop/ to the directory where the dataset should be stored. 
 #  if you don't know what to write, just write nothing : "" (empty)

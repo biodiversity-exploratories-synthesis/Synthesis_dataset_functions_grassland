@@ -213,7 +213,7 @@ years : 2008, 2009
 np <- data.table::fread(paste(pathtodata, info_data$subpath[grep("NaHCO3.Pi", info_data$ColumnName)], sep=""), header=T, sep='\t') 
 np <- np[grep("G", np$EP)]
 np <- np[, c("EP", "NaHCO3_Pi")]
-data.table::setnames(np, old="EP", new="Plot")
+data.table::setnames(np, old=c("EP", "NaHCO3_Pi"), new=c("Plot", "NaHCO3.Pi"))
 raw_functions <- merge(raw_functions, np, by="Plot", all=T) ; rm(np)
 ```
 
