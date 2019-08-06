@@ -671,7 +671,6 @@ raw_functions[, "soilAmmoniaflxs" := multidiv(nce_a[, !"Plotn", with=F], sc="sd"
 raw_functions[, "soilNitrateflxs" := multidiv(nce_n[, !"Plotn", with=F], sc="sd", cent=T)[,1]]
 
 rm(nce_n); rm(nce_a); rm(nce)
-raw_functions[,c("Urease", "DEA","Potential.nitrification2011", "Potential.nitrification2014","nifH","amoA_AOB.2011","amoA_AOA.2011", "amoA_AOB.2016", "amoA_AOA.2016", "nxrA_NS", "16S_NB") := NULL]
 ```
 
 ## P_loss_comb
