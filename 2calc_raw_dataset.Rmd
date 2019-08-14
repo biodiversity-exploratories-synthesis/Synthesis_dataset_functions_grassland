@@ -653,16 +653,14 @@ It could be that nitrospira and nitrobacter have slightly different habitat pref
 
 Inversion of DEA such that functions "point to same functional direction".
 ```{r}
-nce <- raw_functions[,c("Plotn", "DEA","nifH", "nxrA_NS", "16S_NB")]
-# invert DEA measure to nitrate production and availability
-nce[, "nitrate.production.availability" := DEA * -1]
-nce[, "DEA" := NULL]
+nce <- raw_functions[,c("Plotn", "nitrate.production.availability","nifH", "nxrA_NS", "16S_NB")]
 # sum abundances of nitrite oxidising functional genes
 nce[, "nitOx_fga" := nxrA_NS + `16S_NB`]
 nce[, c("nxrA_NS", "16S_NB") := NULL]
 
 # mini-multifunctionality
 raw_functions[, "soilNitrateflxs" := multidiv(nce[, !"Plotn", with=F], sc="sd", cent=T)[,1]]
+rm(nce)
 ```
 
 ## soilAmmoniaflxs
