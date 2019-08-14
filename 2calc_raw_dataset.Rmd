@@ -609,6 +609,25 @@ ggplot2::ggplot(data = dd, ggplot2::aes(x = removal_g, y = scaled_removal_g, col
 
 rm(dung.removal); rm(dd)
 ```
+## dung depletion
+```{r}
+dung <- list_raw_functions[["seed"]]
+dung <- data.table::data.table(aggregate(dung_depletion ~ Plot, dung, function(x) mean(x, na.rm=T)))
+data.table::setnames(dung, old = "dung_depletion", new = "dung.removal2017")
+raw_functions <- merge(raw_functions, dung, by = "Plot", all = T)
+rm(dung)
+```
+
+## seed depletion
+SEG33, SEG36, SEG47 had all NA
+```{r}
+seed <- list_raw_functions[["seed"]]
+# mean of subplots
+seed <- data.table::data.table(aggregate(seed_depletion ~ Plot, seed, function(x) mean(x, na.rm=T)))
+data.table::setnames(seed, old = "seed_depletion", new = "seed.depletion")
+raw_functions <- merge(raw_functions, seed[, .(Plot, seed.depletion)], by = "Plot", all = T)
+rm(seed)
+```
 
 # potential nitrification
 Combination of years 2011 and 2014
@@ -666,11 +685,11 @@ rm(nce)
 ## soilAmmoniaflxs
 ```{r}
 nce <- raw_functions[, c("Plotn", "Urease","amoA_AOB.2011","amoA_AOA.2011", "amoA_AOB.2016", "amoA_AOA.2016")]
-# take mean of multi-year-measurements
-nce[, "amoA_AOB" := apply(nce[,c("amoA_AOB.2011", "amoA_AOB.2016")],1, function(x) mean(x, na.rm = T))]
-nce[, "amoA_AOA" := apply(nce[,c("amoA_AOA.2011", "amoA_AOA.2016")],1, function(x) mean(x, na.rm = T))]
-nce[, "amm-ox_funct_gene_abund" := amoA_AOB + amoA_AOA]
-nce[, c("amoA_AOB", "amoA_AOA", "amoA_AOB.2011", "amoA_AOB.2016", "amoA_AOA.2011", "amoA_AOA.2016") := NULL]
+# sum per year and take the mean of 2 years after
+nce[, "amOX_fga2011" := amoA_AOB.2011 + amoA_AOA.2011]
+nce[, "amOX_fga2016" := amoA_AOB.2016 + amoA_AOA.2016]
+nce[, "amOX_fga" := apply(nce[,c("amOX_fga2011", "amOX_fga2016")],1, function(x) mean(x, na.rm = T))]
+nce[, c("amOX_fga2011", "amOX_fga2016", "amoA_AOB.2011", "amoA_AOB.2016", "amoA_AOA.2011", "amoA_AOA.2016") := NULL]
 raw_functions[, "soilAmmoniaflxs" := multidiv(nce[, !"Plotn", with=F], sc="sd", cent=T)[,1]]
 rm(nce)
 ```
