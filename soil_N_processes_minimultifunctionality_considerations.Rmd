@@ -1,0 +1,54 @@
+---
+title: "soil N processes"
+author: "Noelle Schenk"
+date: "August 14, 2019"
+output: html_document
+---
+requires : 
+- raw functions dataset
+
+# soil N related processes
+Corrplot with all raw included data
+```{r}
+nce <- imputed_grlfuns[,c("Plotn", "nitrate.production.availability","nifH", "nxrA_NS", "16S_NB", "Urease","amoA_AOB.2011","amoA_AOA.2011", "amoA_AOB.2016", "amoA_AOA.2016")]
+M <- Hmisc::rcorr(as.matrix(nce[, !"Plotn", with=F]), type = "spearman"); mr <- M$r ; mp <- M$P; mp[mp > 0.05] <- 0
+par(mfrow = c(2, 1))
+corrplot::corrplot(mr,type="lower",addCoef.col = "black",method="color",diag=T, tl.srt=1, tl.col="black", mar=c(0,0,0,0), number.cex=0.6, order = "hclust")
+
+
+# sum abundances of nitrite oxidising functional genes
+nce[, "nitOx_fga" := nxrA_NS + `16S_NB`]
+# nce[, c("nxrA_NS", "16S_NB") := NULL]
+# sum per year and take the mean of 2 years after
+nce[, "amOX_fga2011" := amoA_AOB.2011 + amoA_AOA.2011]
+nce[, "amOX_fga2016" := amoA_AOB.2016 + amoA_AOA.2016]
+nce[, "amOX_fga" := apply(nce[,c("amOX_fga2011", "amOX_fga2016")],1, function(x) mean(x, na.rm = T))]
+
+snce <- nce[, .(nitrate.production.availability, nifH, nitOx_fga, Urease, amOX_fga)]
+
+M <- Hmisc::rcorr(as.matrix(snce[, !"Plotn", with=F]), type = "spearman"); mr <- M$r ; mp <- M$P; mp[mp > 0.05] <- 0
+corrplot::corrplot(mr,type="lower",addCoef.col = "black",method="color",diag=T, tl.srt=1, tl.col="black", mar=c(0,0,0,0), number.cex=0.6, order = "hclust")
+```
+
+
+Compare 2 ways of calculation of multifuncs
+
+```{r}
+# AMMONIA
+# OLD : calc mean of amoA 2011 and 2016
+nce[, "amoA_AOA" := apply(nce[,c("amoA_AOA.2011", "amoA_AOA.2016")],1, function(x) mean(x, na.rm = T))]
+nce[, "amoA_AOB" := apply(nce[,c("amoA_AOB.2011", "amoA_AOB.2016")],1, function(x) mean(x, na.rm = T))]
+
+imputed_grlfuns[, "soilAmmoniaflxsOLD" := multidiv(nce[, .(Urease, amoA_AOA, amoA_AOB)], sc="sd", cent=T)[,1]]
+imputed_grlfuns[, "soilAmmoniaflxs" := multidiv(nce[, .(Urease, amOX_fga)], sc="sd", cent=T)[,1]]
+
+par(mfrow = c(2,1))
+plot(imputed_grlfuns$soilAmmoniaflxs, imputed_grlfuns$soilAmmoniaflxsOLD, main = "soil Ammonium fluxes")
+
+# NITRATE
+imputed_grlfuns[, "soilNitrateflxsOLD" := multidiv(nce[, .(nitrate.production.availability, nifH, nxrA_NS, `16S_NB`)], sc="sd", cent=T)[,1]]
+imputed_grlfuns[, "soilNitrateflxs" := multidiv(nce[, .(nitrate.production.availability, nifH, nitOx_fga)], sc="sd", cent=T)[,1]]
+
+plot(imputed_grlfuns$soilNitrateflxs, imputed_grlfuns$soilNitrateflxsOLD, main = "soil Nitrate fluxes")
+```
+
