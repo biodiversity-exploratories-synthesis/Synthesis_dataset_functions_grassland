@@ -676,20 +676,6 @@ rm(nce)
 ```
 
 
-
-## P_loss_comb
-combination of PRI and P_loss/ P_leaching risk.
-
-PRI was measured in 2014 and is not correlated with the P_loss measures. Therefore, this is not calculated here.
-```{r, eval=F}
-plc <- raw_functions[, c("P_loss2011", "P_leaching_risk2015", "PRI", "PRI.2011")]
-# take mean of P_loss 2011 and leaching risk 2015
-plc[, "P_loss" := apply(plc[,c("P_loss2011", "P_leaching_risk2015")],1, mean)]
-plc[, "PRI1" := apply(plc[, c("PRI", "PRI.2011")], 1, mean)]
-plc[, c("P_loss2011", "P_leaching_risk2015", "PRI", "PRI.2011") := NULL]
-raw_functions[, "P_loss_comb" := multidiv(plc, sc="sd", cent=TRUE)[,1]]; rm(plc)
-```
-
 # P leaching risk comb
 In case PRI and P_loss are not combined to P_loss_comb, the two years or P leaching risk are combined here.
 ```{r}
