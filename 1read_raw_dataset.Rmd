@@ -530,7 +530,7 @@ some measurements only summer 2014, others the whole years (9 grassland plots pe
 
 Only measurements from summer 2014 taken, where 5 replicates were measured on each plot.
 ```{r}
-dung.removal <- data.table::fread(paste(pathtodata, info_data$subpath[grep("dung.removal", info_data$ColumnName)], sep=""), header=T, sep='\t')
+dung.removal <- data.table::fread(paste(pathtodata, info_data$subpath[grep("dung.removal$", info_data$ColumnName)], sep=""), header=T, sep='\t')
 # only take Grassland plots
 dung.removal <- dung.removal[grep("G", dung.removal$EP)]
 dung.removal <- dung.removal[grep("2014", dung.removal$month)]
@@ -545,7 +545,6 @@ arthropod-mediated processes
 
 134 plots
 ```{r}
-#TODO : automatic reading
 seed <- data.table::fread(paste(pathtodata, info_data$subpath[grep("seed.depletion", info_data$ColumnName)], sep=""), header=T, sep='\t')
 # filter for grassland plots
 seed <- seed[unique(grep("G", seed$Plot, value = F)), ]
