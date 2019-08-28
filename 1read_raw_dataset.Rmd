@@ -629,6 +629,15 @@ data.table::setnames(nit2011, old=c("PlotID", "amoA_AOA", "amoA_AOB"), new=c("Pl
 raw_functions <- merge(raw_functions, nit2011[, c("Plot", "amoA_AOA.2011", "amoA_AOB.2011", "nifH")], by="Plot", all=T) ; rm(nit2011)
 ```
 
+# Caterpillar predation rates
+predation rates on dummy caterpillars within 48h to measure natural pest control
+```{r, eval = F}
+pred <- data.table::fread(paste(pathtodata, info_data$subpath[grep("caterpillars.predation", info_data$ColumnName)], sep=""), header=T, sep='\t')
+pred <- pred[grep("G", pred$PlotID),]
+pred <- aggregate(Predation_prop ~ PlotID, pred, function(x) mean(x, na.rm=T))
+#TODO HERE finish loading as for other functions and move calculation to 2calc.
+```
+
 
 # Code to load, but not included
 Below: code to load or starting to load Flower cover, forage quality and charismatic butterfly. Not finished because not included in functions dataset.
