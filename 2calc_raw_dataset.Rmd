@@ -305,6 +305,15 @@ list_raw_functions["Total.pollinators"] <- NULL
 ```
 
 
+# caterpillars predation
+
+```{r}
+pred <- list_raw_functions$caterpillars.predation
+pred <- aggregate(caterpillars.predation ~ Plot, pred, function(x) mean(x, na.rm=T))
+raw_functions <- merge(raw_functions, pred, by = "Plot", all = T)
+list_raw_functions["caterpillars.predation"] <- NULL; rm(pred)
+```
+
 
 # PRI
 from synthesis .html : 

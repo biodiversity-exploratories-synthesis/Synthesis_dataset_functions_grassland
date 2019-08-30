@@ -631,11 +631,12 @@ raw_functions <- merge(raw_functions, nit2011[, c("Plot", "amoA_AOA.2011", "amoA
 
 # Caterpillar predation rates
 predation rates on dummy caterpillars within 48h to measure natural pest control
-```{r, eval = F}
+```{r}
 pred <- data.table::fread(paste(pathtodata, info_data$subpath[grep("caterpillars.predation", info_data$ColumnName)], sep=""), header=T, sep='\t')
-pred <- pred[grep("G", pred$PlotID),]
-pred <- aggregate(Predation_prop ~ PlotID, pred, function(x) mean(x, na.rm=T))
-#TODO HERE finish loading as for other functions and move calculation to 2calc.
+pred <- pred[grep("G", pred$PlotID), .(PlotID, Predation_prop)]
+data.table::setnames(pred, old = c("PlotID", "Predation_prop"), new = c("Plot", "caterpillars.predation"))
+# add to functions list
+list_raw_functions[["caterpillars.predation"]] <- pred; rm(pred)
 ```
 
 
