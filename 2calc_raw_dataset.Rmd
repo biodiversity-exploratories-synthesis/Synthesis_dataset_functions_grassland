@@ -645,11 +645,11 @@ raw_functions[, "Potential.nitrification" := apply(raw_functions[, c("Potential.
 ```
 
 
-# nitrate.production.availability
+# DEA.inverted
 Inversion of DEA to get nitrate production and availability measure, is easier to combine to mini- multifunctionality later
 
 ```{r}
-raw_functions[, "nitrate.production.availability" := DEA * -1]
+raw_functions[, "DEA.inverted" := DEA * -1]
 ```
 
 
@@ -681,7 +681,7 @@ It could be that nitrospira and nitrobacter have slightly different habitat pref
 
 Inversion of DEA such that functions "point to same functional direction".
 ```{r}
-nce <- raw_functions[,c("Plotn", "nitrate.production.availability","nifH", "nxrA_NS", "16S_NB")]
+nce <- raw_functions[,c("Plotn", "DEA.inverted","nifH", "nxrA_NS", "16S_NB")]
 # sum abundances of nitrite oxidising functional genes
 nce[, "nitOx_fga" := nxrA_NS + `16S_NB`]
 nce[, c("nxrA_NS", "16S_NB") := NULL]
