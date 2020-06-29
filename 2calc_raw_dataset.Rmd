@@ -125,12 +125,12 @@ names(Gtot) <- c("Plot", seq(2010, 2016,1))
 ```{r}
 # unscaled
 Gtot[, "unscaled_mean" := apply(.SD, 1, mean), .SDcols = names(Gtot)[-1]]
-unscaled <- ggplot2::ggplot(data.table::melt(Gtot), ggplot2::aes(factor(variable), value, fill = variable)) + ggplot2::geom_violin() + ggplot2::scale_color_brewer(palette="Set1")
+unscaled <- ggplot2::ggplot(data.table::melt(Gtot, id = "Plot"), ggplot2::aes(factor(variable), value, fill = variable)) + ggplot2::geom_violin() + ggplot2::scale_color_brewer(palette="Set1")
 
 #scaled
 scd <- cbind(Gtot[,c("Plot")], apply(Gtot[, c("2010", "2011", "2012", "2013", "2014", "2015", "2016")], 2, scale))
 scd[, "mean_of_years" := apply(.SD, 1, mean), .SDcols = names(scd)[-1]]
-scaled <- ggplot2::ggplot(data.table::melt(scd), ggplot2::aes(factor(variable), value, fill=variable)) + ggplot2::geom_violin() + ggplot2::scale_color_brewer(palette="Set1")
+scaled <- ggplot2::ggplot(data.table::melt(scd, id = "Plot"), ggplot2::aes(factor(variable), value, fill=variable)) + ggplot2::geom_violin() + ggplot2::scale_color_brewer(palette="Set1")
 
 # comparing means
 means <- merge(scd, Gtot, by="Plot")
