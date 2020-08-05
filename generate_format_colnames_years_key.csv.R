@@ -32,10 +32,10 @@ meta <- fread("<old-formatted-metadata-table.csv>")
 setnames(meta, old = "ColumnName", new = "oldnames")
 varkey <- merge(varkey, meta[, .(oldnames, Year)], by = "oldnames")
 # NaHCO3_Pi was measured in years 2008 and 2009 --> give it 2008.5
-# aggregated measures : 444444 (this number as it is spotted easily)
+# aggregated measures : 4444 (this number as it is spotted easily)
 varkey[variable == "NaHCO3_Pi", Year := "2008.5"]
 manually_inspectme <- varkey$Year[!varkey$Year %in% seq(2008, 2018, by = 0.5)]
-varkey[Year %in% manually_inspectme, Year := "444444"]
+varkey[Year %in% manually_inspectme, Year := "4444"]
 
 # take away numbers from variable names
 varkey[, short_varname := gsub("[0-9]{4}$", "", varkey$variable)] # remove 4 last numbers
