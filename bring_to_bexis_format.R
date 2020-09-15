@@ -22,10 +22,13 @@ synthesisdataset[, value := as.character(value)]
 synthesisdataset <- dcast(synthesisdataset, Plot + Plotn + Explo + Year ~ short_varname, fill = "NM")
 # NM = not measured
 setorder(synthesisdataset, Plotn, Explo)
-
-fwrite(synthesisdataset, file = "june2020_raw_functions_dataset_bexisformat_long.csv")
-
-
+#TODO solve the encoding problem for Bexis upload
+# synthesisdataset <- fread("~/Documents/IPS_2020/dataset_upload/june2020_raw_functions_dataset_bexisformat_long.csv")
+# # sort columns alphabetically
+# test[ , order(names(test))]
+# on <- names(synthesisdataset)[order(names(synthesisdataset))]
+# synthesisdataset <- synthesisdataset[, ..on]
+fwrite(synthesisdataset, file = "june2020_raw_functions_dataset_bexisformat_long.csv", dec = ".", sep = ",", quote = F)
 
 ####
 # METADATA
