@@ -31,6 +31,11 @@
 #          this new .csv file is used for the conversion.
 
 ##
+# install required packages
+install.packages("data.table")
+install.packages("reshape2")
+
+##
 # load required packages
 require(data.table)
 require(reshape2)
