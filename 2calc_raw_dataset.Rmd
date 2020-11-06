@@ -3,6 +3,8 @@ title: "Assemble raw dataset for functions - calculations"
 author: "Noelle Schenk, Eric Allan, Caterina Penone"
 date: "May, 2019"
 output: 
+  pdf_document:
+    toc: yes
   html_document:
     toc: true
     theme: readable
@@ -722,7 +724,7 @@ rm(list_raw_functions); rm(info_data)
 ```
 
 store as .csv document
-```{r}
+```{r, eval=F}
 cat("Dear user, \n
     Please enter a prefix (=piece of the name which is printed in front of a file).\n
     It will be used for the assembled functions dataset.\n
