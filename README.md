@@ -14,6 +14,11 @@ Code used for generation of the 2019 synthesis grassland function dataset.
 ### BExIS upload
 
 - `bring_to_bexis_format.R` : applies formatting changes needed for bexis upload (e.g. column "Year" instead of having each function-year combination (e.g. Biomass.2008, Biomass.2009) in separate columns). Decreases number of columns but increases number of (empty) rows.
--  `generate_format_colnames_years_key.csv.R` generates the output:`format_colnames_years_key.csv`
+- `generate_format_colnames_years_key.csv.R` generates the output:`format_colnames_years_key.csv`
+- `27626_bexis_to_wide_format` : changes back the applied format changes to the original format. Is uploaded separately as well.
 
-- `27626_bexis_to_wide_format` : changes back the applied format changes to the original format
+
+
+### additional scripts
+
+- `soil_N_processes_minimultifunctionality_considerations.Rmd` : considerations for function selection
