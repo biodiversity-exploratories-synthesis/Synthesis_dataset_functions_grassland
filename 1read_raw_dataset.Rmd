@@ -13,8 +13,8 @@ output:
 # to knit this document, run rmarkdown::render('<pathtothisdocument>/1read_raw_dataset.Rmd')
 ```
 
-# Automatic running
-This file should run automatically, the user needs to change/ take an action at lines starting with "#USER". This file loads the datasets from BExIS and is the prerequisite for "2calc_raw_dataset.Rmd". The latter calculates (if needed) the functions from the loaded variables.
+# Introduction
+The user needs to change/ take an action at lines starting with "#USER". This file loads the datasets from BExIS and is the prerequisite for "2calc_raw_dataset.Rmd". The latter calculates (if needed) the functions from the loaded variables.
 
 ## Knit to HTML
 In order to knit this document to HTML, the file "nonpublic.R" needs to be run, or the variables `pathtodata` and `info_data` need to be given (see below why and how). Use the following command to knit:
@@ -24,40 +24,27 @@ rmarkdown::render("1read_raw_dataset.Rmd")
 
 
 # Loading raw data
-An overview of the data is given in "info_data.csv". From there, the path of data files can be read out. 
+An overview of the data is given in the BExIS file 27088 (Additional information). 
 
-In order to read in data correctly, the path to the folder which contains the data needs to be given (as variable `pathtodata`). "The data" refers to the downloaded and unzipped data files as they are downloaded from Bexis. The names of the BExIS files are given in "info_data.csv", in order to confirm versions. In the below script, the path in `pathtodata` is pasted together with the path given in "info_data.csv" (column "subpath").
+In order to read in data correctly, the path to the folder which contains the data needs to be given (as variable `pathtodata`). "The data" refers to the downloaded and unzipped data files as they are downloaded from Bexis. The names of the BExIS files are given in 27088 "zipfile name", in order to confirm versions. All extracted zip files should be stored together in the same folder (where `pathtodata` points to).
 
 Example : (if the BExIS unzipped data files (folders) are stored in the folder "BExIS_raw_data")
 
 `pathtodata <- "C:/Documents/Projects/Synthesis/Functions_dataset/BExIS_raw_data/"`
 
-will be merged with "12706_Measurement of biomass (2010, all grassland EPs)_1.1.8_PublicDataset/12706.txt" from "info_data.csv" to load Biomass data from 2010.
+pathtodata is pasted together with the name of the zip file, which is stored in dataset 27088: please export that to "27088_helper.csv" as described below:
+dataset 27088 : open the excel sheet "synthesis_grassland_function_metadata_ID27088", convert the first tab "synthesis_grassland_function_metadata_ID26726" to csv WITH ; AS DELIMINER (because "," is used within cells). Store this new .csv file as "27088_helper.csv".
 
-Reading pathtodata and the file "info_data.csv"
+Reading pathtodata and the file "27088_helper.csv"
 ```{r}
 #USER : insert needed path.
 # NOTE : don't forget to end with / (unix) or \\ (windows)
 # pathtodata <- "C:/Documents/Projects/Synthesis/Functions_dataset/BExIS_raw_data/"
 
-#USER : insert path to info_data.csv
-# info_data <- data.table::fread("C:/Documents/Projects/Synthesis/Functions_dataset/info_data.csv")
+#USER : insert path to 27088_helper.csv
+# info_data <- data.table::fread("C:/Documents/Projects/Synthesis/Functions_dataset/27088_helper.csv")
 ```
 
-## Loading raw data, University of Bern
-In case you are a member of the University of Bern and have access to the shared network drive from the University of Bern, you can use the file `nonpublic.R` which is storead at the same location as this script in order to load the required paths. In this case, no `pathtodata` variable needs to be given (because this is done in `nonpublic.R`).
-
-*note* : In order to read in data, you need to be connected to server. 
-
-The paths in Windows systems are given with "\\", while in Unix systems with "/". Therefore, info_data has 2 columns with file path, one with / and the other with \\. Uncomment the according lines below.
-```{r}
-#USER : uncomment the needed line (see above in text)
-# Unix-like : uncomment the following line
-# info_data <- info_data[grep("_", info_data$subpath),c("ColumnName", "subpath")] # only show lines which contain path info
-
-# Windows-like : uncomment the following line
-# info_data <- info_data[grep("_", info_data$subpath_windows),c("ColumnName", "subpath_windows")] # only show lines which contain path info
-```
 
 
 
@@ -88,9 +75,7 @@ list_raw_functions <- list()
 
 
 # Biomass
-years 2008 to 2017. **caution**, 2008 might not be reliable, will be assessed in `2calc_raw_dataset.R`.
-
-all biomasses in g/m^2
+years 2008 to 2017. All biomasses in g/m^2
 
 special case 2009 : Biomass was clipped in each two subplots per plot. In each subplot we clipped four 50 x 50 cm plots 2-3 cm above-ground.
 two treatments, K1 and K2, K2 is taken in synthesis. 149 plots only.
@@ -101,65 +86,65 @@ two treatments, K1 and K2, K2 is taken in synthesis. 149 plots only.
 
 ```{r}
 # 2008
-Biomass2008 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2008", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2008 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2008", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2008 <- Biomass2008[, c("PlotID", "biomass_g_m_2")]
 data.table::setnames(Biomass2008, old= c("PlotID", "biomass_g_m_2"), new = c("Plot", "Biomass2008"))
 raw_functions <- merge(raw_functions, Biomass2008, by="Plot", all=T)
 rm(Biomass2008)
 
 # 2009
-Biomass2009 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2009", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2009 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2009", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2009 <- Biomass2009[, c("GpPlotID", "Day_of_year", "Treatment", "Biomass")]
 data.table::setnames(Biomass2009, old=c("GpPlotID", "Biomass"), new=c("Plot", "Biomass2009"))
 list_raw_functions[["Biomass2009"]] <- Biomass2009; rm(Biomass2009)
 
 # 2010
-Biomass2010 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2010", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2010 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2010", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2010 <- Biomass2010[, c("PlotID", "Biomasse")]
 data.table::setnames(Biomass2010, old= c("PlotID", "Biomasse"), new = c("Plot", "Biomass2010"))
 raw_functions <- merge(raw_functions, Biomass2010, by="Plot", all=T)
 rm(Biomass2010)
 
 # 2011
-Biomass2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2011 <- Biomass2011[,c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2011, old = c("EpPlotID", "biomass_g"), new = c("Plot", "Biomass2011"))
 raw_functions <- merge(raw_functions, Biomass2011, by="Plot", all=T)
 rm(Biomass2011)
 
 # 2012
-Biomass2012 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2012", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2012 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2012", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2012 <- Biomass2012[, c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2012, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2012"))
 raw_functions <- merge(raw_functions, Biomass2012, by="Plot", all=T)
 rm(Biomass2012)
 
 # 2013
-Biomass2013 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2013", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2013 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2013", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2013 <- Biomass2013[, c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2013, old= c("EpPlotID", "biomass_g"), new= c("Plot", "Biomass2013"))
 raw_functions <- merge(raw_functions, Biomass2013, by="Plot", all=T); rm(Biomass2013)
 
 # 2014
-Biomass2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2014 <- Biomass2014[,c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2014, old = c("EpPlotID", "biomass_g"), new = c("Plot", "Biomass2014"))
 raw_functions <- merge(raw_functions, Biomass2014, by="Plot", all=T); rm(Biomass2014)
 
 # 2015
-Biomass2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2015", info_data$ColumnName)], sep=""), header=T, sep='\t', quote="", drop=19)
+Biomass2015 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2015", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t', quote="", drop=19)
 Biomass2015 <- Biomass2015[,c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2015, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2015"))
 raw_functions <- merge(raw_functions, Biomass2015, by="Plot", all=T); rm(Biomass2015)
 
 # 2016
-Biomass2016 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2016", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2016 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2016", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2016 <- Biomass2016[, c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2016, old= c("EpPlotID", "biomass_g"), new= c("Plot", "Biomass2016"))
 raw_functions <- merge(raw_functions, Biomass2016, by="Plot", all=T); rm(Biomass2016)
 
 # 2017
-Biomass2017 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Biomass2017", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Biomass2017 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2017", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Biomass2017 <- Biomass2017[, c("EpPlotID", "biomass_g")]
 data.table::setnames(Biomass2017, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2017"))
 raw_functions <- merge(raw_functions, Biomass2017, by="Plot", all=T); rm(Biomass2017)
@@ -169,7 +154,7 @@ raw_functions <- merge(raw_functions, Biomass2017, by="Plot", all=T); rm(Biomass
 # Soil Organic C
 2011
 ```{r}
-SoilOrganicC <- data.table::fread(paste(pathtodata, info_data$subpath[grep("SoilOrganicC", info_data$ColumnName)], sep=""), header=T, sep='\t')
+SoilOrganicC <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("SoilOrganicC", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 SoilOrganicC <- SoilOrganicC[which(SoilOrganicC$Type == "G"), c("EP_Plotid","Organic_C")]
 data.table::setnames(SoilOrganicC, old=c("EP_Plotid", "Organic_C"), new=c("Plot", "SoilOrganicC"))
 raw_functions <- merge(raw_functions, SoilOrganicC, by="Plot", all=T); rm(SoilOrganicC)
@@ -179,7 +164,7 @@ raw_functions <- merge(raw_functions, SoilOrganicC, by="Plot", all=T); rm(SoilOr
 # Root biomass
 2011, Includes fine and coarse biomass, will add them together in `2calc_raw_dataset.R`.
 ```{r}
-Root.biomass <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Root.biomass", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Root.biomass <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Root.biomass", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Root.biomass <- Root.biomass[Type == "G"]
 Root.biomass <- Root.biomass[,c("EP_Plotid", "Fine_Roots_Biomass", "Coarse_Roots_Biomass")]
 data.table::setnames(Root.biomass, old="EP_Plotid", new="Plot")
@@ -191,14 +176,14 @@ list_raw_functions[["Root.biomass"]] <- Root.biomass ; rm(Root.biomass)
 ## Microbial phosphorous in soil
 2011 and 2014, (mg/kg)
 ```{r}
-Pmic.2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Pmic.2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Pmic.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Pmic.2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Pmic.2011 <- Pmic.2011[grep("G", Pmic.2011$EP)]
 data.table::setnames(Pmic.2011, old=c("EP", "Pmic"), new=c("Plot", "Pmic.2011"))
 raw_functions <- merge(raw_functions, Pmic.2011, by="Plot", all=T); rm(Pmic.2011)
 ```
 
 ```{r}
-Pmic.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Pmic.2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Pmic.2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Pmic.2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Pmic.2014 <- Pmic.2014[,c("EP", "Pmic")]
 data.table::setnames(Pmic.2014, old=c("EP", "Pmic"), new=c("Plot", "Pmic.2014"))
 raw_functions <- merge(raw_functions, Pmic.2014, by="Plot", all=T) ; rm(Pmic.2014)
@@ -210,7 +195,7 @@ raw_functions <- merge(raw_functions, Pmic.2014, by="Plot", all=T) ; rm(Pmic.201
 years : 2008, 2009
 
 ```{r}
-np <- data.table::fread(paste(pathtodata, info_data$subpath[grep("NaHCO3.Pi", info_data$ColumnName)], sep=""), header=T, sep='\t') 
+np <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("NaHCO3.Pi", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t') 
 np <- np[grep("G", np$EP)]
 np <- np[, c("EP", "NaHCO3_Pi")]
 data.table::setnames(np, old=c("EP", "NaHCO3_Pi"), new=c("Plot", "NaHCO3.Pi"))
@@ -220,7 +205,7 @@ raw_functions <- merge(raw_functions, np, by="Plot", all=T) ; rm(np)
 ### Olsen Phosphorous 2014
 Olsen method, measures P available to plants. Is better suited than NaHCO3.
 ```{r}
-OlsenPi2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("OlsenPi2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+OlsenPi2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("OlsenPi2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # grassland plots are abbreviated with a "G", e.g. "AEG", forest plots with "W", e.g. "AEW"
 OlsenPi2014 <- OlsenPi2014[grep("G",OlsenPi2014$Plot_ID),c("Plot_ID","OlsenPi")]
 data.table::setnames(OlsenPi2014, old=c("Plot_ID", "OlsenPi"), new=c("Plotn", "OlsenPi2014"))
@@ -237,7 +222,7 @@ contains: Nshoot and Pshoot of all years, near infrared spectroscopy (NIRS),
 
 note : there are **values for 2008** in dataset 5401 (used for Biomass2008)
 ```{r}
-nutrients <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nshoot.2009", info_data$ColumnName)], sep=""), header=T, sep='\t')
+nutrients <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Nshoot.2009", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # 2009
 nutrients2009 <- nutrients[year == "2009", c("Plot", "N", "P")]
 data.table::setnames(nutrients2009, old=c("N", "P"), new=c("Nshoot.2009", "Pshoot.2009"))
@@ -255,7 +240,7 @@ nutrients2013 <- nutrients[year == "2013", c("Plot", "N", "P")]
 data.table::setnames(nutrients2013, old=c("N", "P"), new=c("Nshoot.2013", "Pshoot.2013"))
 
 # read in 2014 data
-nutrients2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nshoot.2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+nutrients2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Nshoot.2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 nutrients2014 <- nutrients2014[Year == "2014", c("Plot_ID", "N", "P")]
 data.table::setnames(nutrients2014, old = c("Plot_ID", "N", "P"), new=c("Plot", "Nshoot.2014", "Pshoot.2014"))
 
@@ -275,7 +260,7 @@ year is not clear, but most probably 2011. start date is 1.9.2011, end date is 3
 
 ```{r}
 # 2011
-Potential.nitrification <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Potential.nitrification2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Potential.nitrification <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Potential.nitrification2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Potential.nitrification <- Potential.nitrification[,c("PlotID", "pot_nitrification")]
 data.table::setnames(Potential.nitrification, old=c("PlotID", "pot_nitrification"), new=c("Plot", "Potential.nitrification2011"))
 raw_functions <- merge(raw_functions, Potential.nitrification, by="Plot", all=T); rm(Potential.nitrification)
@@ -289,7 +274,7 @@ Most of these datasets are already read in in this script - only Nmic.2014 needs
 
 ## Nmic 2014
 ```{r}
-Nmic.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nmic.2014", info_data$ColumnName)], sep=""), header=T)
+Nmic.2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Nmic.2014", info_data$AggregatedColumnName)], sep=""), header=T)
 data.table::setnames(Nmic.2014, old=c("EP_Plot_ID", "Nmic"), new=c("Plot", "Nmic.2014"))
 raw_functions <- merge(raw_functions, Nmic.2014[, c("Plot", "Nmic.2014")], by="Plot", all=T); rm(Nmic.2014)
 ```
@@ -298,7 +283,7 @@ raw_functions <- merge(raw_functions, Nmic.2014[, c("Plot", "Nmic.2014")], by="P
 Within the soil sampling campaign 2011 all samples are taken in the beginning of May 2011 as a mixed sample from the top horizon (0-10 cm) of the all 50 grassland experimental plots of all three exploratories.
 
 ```{r}
-Nmic.2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Nmic.2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Nmic.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Nmic.2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Nmic.2011 <- Nmic.2011[,c("EP_Plot_ID", "Nmic")]
 data.table::setnames(Nmic.2011, old=c("EP_Plot_ID", "Nmic"), new=c("Plot", "Nmic.2011"))
 raw_functions <- merge(raw_functions, Nmic.2011, by="Plot", all=T); rm(Nmic.2011)
@@ -316,7 +301,7 @@ Like in synthesis dataset, the first measure only is taken.
 NH4 : µg / g DW soil, Ammonium ; NO3 : mg / g DW soil, Nitrate
 ```{r}
 # 2014
-NH4.2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("NH4.2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+NH4.2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("NH4.2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 NH4.2014 <- NH4.2014[grep("G", NH4.2014$Plot_ID), c("Plot_ID", "NH4", "NO3", "PNR")]
 # show duplicates, uncomment if want to see them
 # NH4.2014[NH4.2014$Plot_ID %in% NH4.2014[duplicated(NH4.2014$Plot_ID), Plot_ID]]
@@ -343,13 +328,13 @@ Determination bulk density and calculated CN stocks for the upper 10 cm of the m
 
 ```{r}
 #2011
-Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Soil.C.stock", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Soil.C.stock", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Bulk.density.soil.C.stock.2011 <- Bulk.density.soil.C.stock.2011[Type == "G"]
 Bulk.density.soil.C.stock.2011 <- data.table::setnames(Bulk.density.soil.C.stock.2011[,c("EP_Plotid", "BD", "OC_stock")], old=c("EP_Plotid", "BD", "OC_stock"), new=c("Plot", "Bulk.density2011", "Soil.C.stock"))
 raw_functions <- merge(raw_functions, Bulk.density.soil.C.stock.2011, by="Plot", all=T); rm(Bulk.density.soil.C.stock.2011)
 
 # 2014
-Bulk.density2014 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Bulk.density2014", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Bulk.density2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Bulk.density2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Bulk.density2014 <- Bulk.density2014[, c("EP_Plot_ID", "Bulk_density")]
 data.table::setnames(Bulk.density2014, old = c("EP_Plot_ID", "Bulk_density"), new = c("Plot", "Bulk.density2014"))
 raw_functions <- merge(raw_functions, Bulk.density2014, by="Plot", all=T); rm(Bulk.density2014)
@@ -362,7 +347,7 @@ Renamed to leaching risk, because it does not measure leached N (e.g. in the gro
 
 Combines ammonium and nitrate potential loss.
 ```{r}
-N_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("N_leaching_risk2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
+N_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("N_leaching_risk2015", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 data.table::setnames(N_leaching_risk2015, old = c("Usefull_PlotID", "Mean_N_Sum"), new = c("Plot", "N_leaching_risk2015"))
 N_leaching_risk2015 <- N_leaching_risk2015[, c("Plot", "N_leaching_risk2015")]
 # take reverse values so high values represent low loss
@@ -376,7 +361,7 @@ Decomposition measurements of fine roots (<2mm) within the upper 10 cm of the mi
 
 mass "loss" because decomposed roots are lost.
 ```{r}
-Root.decomposition <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Root.decomposition", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Root.decomposition <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Root.decomposition", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Root.decomposition <- Root.decomposition[Type == "G"]
 Root.decomposition <- data.table::setnames(Root.decomposition[,c("EP_Plotid", "Mass_loss_October_2012")], old=c("EP_Plotid", "Mass_loss_October_2012"), new=c("Plot", "Root.decomposition"))
 raw_functions <- merge(raw_functions, Root.decomposition, by="Plot", all=T); rm(Root.decomposition)
@@ -390,7 +375,7 @@ invertebrate herbivory in 146 managed temperate grasslands. Year: 2013
 
 Visually estimation of herbivory by eye using templates and measurement of leaf area left after feeding of the herbivores using LI-COR area meter. 2 samples per plot in 145 cases, 1 sample for :  "AEG6"  "HEG16" "HEG43" "SEG19" "SEG33" and 3 samples for "SEG45". 2 Columns are included in the raw_functions dataset, 1 for each sample. SEG45 : The mean of all 3 samples was already taken and stored as sample2. Taking the mean of samples2 first and then with sample1 would lead to different results than in the synthesis dataset.
 ```{r}
-herb <- data.table::fread(paste(pathtodata, info_data$subpath[grep("herbivory.2013", info_data$ColumnName)], sep=""), header=T, sep='\t')
+herb <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("herbivory.2013", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 data.table::setorder(herb, EP_Plotid)
 list_raw_functions[["Herbivory.2013"]] <- herb ; rm(herb)
 ```
@@ -403,7 +388,7 @@ prop_a_herb : proportion of leaf area damaged of the 10 (8) most abundant specie
 AEG plots were measured in 2017, SEG/HEG in 2018. 49 AEG plots, 48 HEG plots and 50 SEG plots.
 
 ```{r}
-herb <- data.table::fread(paste(pathtodata, info_data$subpath[grep("herbivory.20172018", info_data$ColumnName)], sep=""), header=T, sep='\t')
+herb <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("herbivory.20172018", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 data.table::setnames(herb, old=c("plotid_withzero", "plotid"), new=c("Plotn", "Plot"))
 herb <- herb[grep("G", herb$Plotn)]
 data.table::setorder(herb, Plotn)
@@ -419,7 +404,7 @@ Resin refers to the method of phosphorous measurement in soil: small bags with f
 
 ## 2011
 ```{r}
-P_loss2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("P_loss2011", info_data$ColumnName)], sep=""), header=T, sep='\t')
+P_loss2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("P_loss2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # filter out grassland plots
 P_loss2011 <- P_loss2011[grep("G", P_loss2011$EP)]
 # get new plot names
@@ -433,7 +418,7 @@ raw_functions <- merge(raw_functions, P_loss2011, by="Plot", all=T); rm(P_loss20
 Different method than 2011, different data owners.
 [µg/g Resin] 	
 ```{r}
-P_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("P_leaching_risk2015", info_data$ColumnName)], sep=""), header=T, sep='\t')
+P_leaching_risk2015 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("P_leaching_risk2015", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 P_leaching_risk2015 <- P_leaching_risk2015[,c("Plot", "Mean_P")]
 data.table::setnames(P_leaching_risk2015, old=c("Mean_P"), new=c("P_leaching_risk2015"))
 # take reverse values so high values represent low loss
@@ -450,7 +435,7 @@ beginning of May 2011, mixed sample from the top horizon (0-10 cm)
 beta_Glucosidase [nmol MUF g-1 h-1], Xylosidase [nmol MUF g-1 h-1], N_Acetyl_beta_Glucosaminidase [nmol MUF g-1 h-1], Urease [µg N g-1 DM 2h-1], DEA = DEA_with_C2H2 [µg N2O-N+N2 g-1 soil dw h-1], Phosphatase [nmol MUF g-1 h-1]
 
 ```{r}
-microbial_enzyme_activities <- data.table::fread(paste(pathtodata, info_data$subpath[grep("beta_Glucosidase", info_data$ColumnName)], sep=""), header=T, sep='\t', drop=c("Exploratory", "Year"))
+microbial_enzyme_activities <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("beta_Glucosidase", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t', drop=c("Exploratory", "Year"))
 data.table::setnames(microbial_enzyme_activities, old=c("EP_Plot_ID","DEA_with_C2H2"), new=c("Plot", "DEA"))
 raw_functions <- merge(raw_functions, microbial_enzyme_activities, by="Plot", all=T); rm(microbial_enzyme_activities)
 ```
@@ -459,7 +444,7 @@ raw_functions <- merge(raw_functions, microbial_enzyme_activities, by="Plot", al
 # mAMFhyphae and Aggreggation
 on 93 grassland EPs, 2011. 17 from AEG, 22 from HEG and 18 from SEG. Measured to explore how land use was affecting the ability of soil microbes to aggregate soil. Extraradical fungal hyphal length, measured in hyphae per gram soil
 ```{r}
-mAMFhyphae <- data.table::fread(paste(pathtodata, info_data$subpath[grep("mAMFhyphae", info_data$ColumnName)], sep=""), header=T, sep='\t')
+mAMFhyphae <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("mAMFhyphae", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 mAMFhyphae <- mAMFhyphae[,c("Plot", "percentAggregation", "mAMFhyphaepergramsoil")]
 # plots measured, number of plots per exploratory, uncomment below lines to get overview.
 # pm <- raw_functions$Plot[!raw_functions$Plot %in% mAMFhyphae$Plot]
@@ -480,7 +465,7 @@ NF1 [mm]: net flux betw. 0 - 0.15 m soil layer and deeper soil
 
 Groundwater recharge and discharge areas differ considerably in terms of soil pH and plant species richness, with both increasing towards discharge areas (Giesler et al., 1998; Zinko et al., 2005).
 ```{r}
-Groundwater.recharge <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Groundwater.recharge", info_data$ColumnName)][1], sep=""), header=T, sep='\t')
+Groundwater.recharge <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Groundwater.recharge", info_data$AggregatedColumnName)][1], sep=""), header=T, sep='\t')
 Groundwater.recharge <- Groundwater.recharge[,c("EP_Plotid", "year", "NF1")]
 Gtot <- data.table::copy(raw_functions[, "Plot"])
 # 2010
@@ -530,7 +515,7 @@ some measurements only summer 2014, others the whole years (9 grassland plots pe
 
 Only measurements from summer 2014 taken, where 5 replicates were measured on each plot.
 ```{r}
-dung.removal <- data.table::fread(paste(pathtodata, info_data$subpath[grep("dung.removal$", info_data$ColumnName)], sep=""), header=T, sep='\t')
+dung.removal <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("dung.removal$", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # only take Grassland plots
 dung.removal <- dung.removal[grep("G", dung.removal$EP)]
 dung.removal <- dung.removal[grep("2014", dung.removal$month)]
@@ -545,7 +530,7 @@ arthropod-mediated processes
 
 134 plots
 ```{r}
-seed <- data.table::fread(paste(pathtodata, info_data$subpath[grep("seed.depletion", info_data$ColumnName)], sep=""), header=T, sep='\t')
+seed <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("seed.depletion", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # filter for grassland plots
 seed <- seed[unique(grep("G", seed$Plot, value = F)), ]
 list_raw_functions[["seed"]] <- seed[, .(Plot, dung_depletion, seed_depletion)]
@@ -556,16 +541,16 @@ rm(seed)
 # Litter decomposition
 litter bag approach, Mass loss in the litter bags, after two months, and four months. 1.5g of dry plant material. January 2013 put 10 bags each, 2 months later retrieval of 5 bags, 2 more months : retrieval of other 5 bags. calculated daily decomposition rates.
 ```{r}
-Litter.decomposition <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Litter.decomposition", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Litter.decomposition <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Litter.decomposition", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 list_raw_functions[["Litter.decomposition"]] <- Litter.decomposition ; rm(Litter.decomposition)
 ```
 
 
 # Parasitoid traps
 ```{r}
-AEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath[grep("Parasitoid.traps", info_data$ColumnName)], split=", ")[[1]][1], sep=""), header = T, sep="\t")
-HEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath[grep("Parasitoid.traps", info_data$ColumnName)], split=", ")[[1]][2], sep=""), header=T, sep="\t")
-SEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath[grep("Parasitoid.traps", info_data$ColumnName)], split=", ")[[1]][3], sep=""), header=T, sep="\t")
+AEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath_unix[grep("Parasitoid.traps", info_data$AggregatedColumnName)], split=", ")[[1]][1], sep=""), header = T, sep="\t")
+HEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath_unix[grep("Parasitoid.traps", info_data$AggregatedColumnName)], split=", ")[[1]][2], sep=""), header=T, sep="\t")
+SEGpt <- data.table::fread(paste(pathtodata, strsplit(info_data$subpath_unix[grep("Parasitoid.traps", info_data$AggregatedColumnName)], split=", ")[[1]][3], sep=""), header=T, sep="\t")
 Parasitoid.traps <- rbind(AEGpt, HEGpt, SEGpt)
 # store in list of raw datasets
 list_raw_functions[["Parasitoid.traps"]] <- Parasitoid.traps ; rm(Parasitoid.traps); rm(AEGpt); rm(HEGpt); rm(SEGpt)
@@ -581,10 +566,10 @@ The datasets are stored at the same place as other raw_datasets. Name :  "BE.fol
 
 note : code adapted from Eric Allan
 ```{r}
-path <- paste(pathtodata, info_data$subpath[grep("pathogen.infection", info_data$ColumnName)], sep="")
+path <- paste(pathtodata, info_data$subpath_unix[grep("pathogen.infection", info_data$AggregatedColumnName)], sep="")
 pat <- read.table(paste(path, "BE.foliar pathogen grass.txt", sep=""), header =T)
 # data is in relative abundances.
-npla <- data.table::fread(paste(pathtodata, info_data$subpath[grep("plant.cover", info_data$ColumnName)][[1]], sep=""), header=T, sep="\t")
+npla <- data.table::fread(paste(pathtodata, "24247_Vegetation Records for Grassland EPs, 2008 - 2018_1.1.1/24247.txt", sep = ""), header=T, sep="\t")
 npla <- npla[Year == "2011", c("Useful_EP_PlotID", "Species", "Cover")]
 data.table::setnames(npla, old = "Useful_EP_PlotID", new= "Plot")
 npla[, Cover := as.numeric(Cover)]
@@ -598,7 +583,7 @@ rm(path)
 # Total pollinators
 The total amount of visits per plot will be taken as total pollinators function.
 ```{r}
-Total.pollinators <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Total.pollinators", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Total.pollinators <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Total.pollinators", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Total.pollinators <- Total.pollinators[,c("EP_ID", "Total")]
 data.table::setnames(Total.pollinators, old=c("EP_ID", "Total"), new=c("Plot", "Total.pollinators"))
 list_raw_functions[["Total.pollinators"]] <- Total.pollinators; rm(Total.pollinators)
@@ -619,12 +604,12 @@ nxrA_NS and 16S_NB are present in nitrite-oxidizing bacteria (NOB)
 2011 and 2016 datasets.
 ```{r}
 # 2016
-amo <- data.table::fread(paste(pathtodata, info_data$subpath[grep("amoA_AOB.2016", info_data$ColumnName)], sep=""), header=T, sep='\t')
+amo <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("amoA_AOB.2016", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 data.table::setnames(amo, old=c("Plot_ID", "amoA_AOA", "amoA_AOB"), new=c("Plot", "amoA_AOA.2016", "amoA_AOB.2016"))
 raw_functions <- merge(raw_functions, amo[,c("Plot","amoA_AOA.2016", "amoA_AOB.2016", "nxrA_NS", "16S_NB")], by="Plot", all = T); rm(amo)
 
 # 2011
-nit2011 <- data.table::fread(paste(pathtodata, info_data$subpath[grep("nifH", info_data$ColumnName)], sep=""), header=T, sep='\t')
+nit2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("nifH", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 data.table::setnames(nit2011, old=c("PlotID", "amoA_AOA", "amoA_AOB"), new=c("Plot", "amoA_AOA.2011", "amoA_AOB.2011"))
 raw_functions <- merge(raw_functions, nit2011[, c("Plot", "amoA_AOA.2011", "amoA_AOB.2011", "nifH")], by="Plot", all=T) ; rm(nit2011)
 ```
@@ -632,7 +617,7 @@ raw_functions <- merge(raw_functions, nit2011[, c("Plot", "amoA_AOA.2011", "amoA
 # Caterpillar predation rates
 predation rates on dummy caterpillars within 48h to measure natural pest control
 ```{r}
-pred <- data.table::fread(paste(pathtodata, info_data$subpath[grep("caterpillars.predation", info_data$ColumnName)], sep=""), header=T, sep='\t')
+pred <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("caterpillars.predation", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 pred <- pred[grep("G", pred$PlotID), .(PlotID, Predation_prop)]
 data.table::setnames(pred, old = c("PlotID", "Predation_prop"), new = c("Plot", "caterpillars.predation"))
 # add to functions list
@@ -648,7 +633,7 @@ Below: code to load or starting to load Flower cover, forage quality and charism
 
 We can go from "total_influorescence_area_in_cm" of each species to a total flower cover. The total area measured was : 600m² per grassland plot.
 ```{r, eval=F}
-Total.flower.cover <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Total.flower.cover", info_data$ColumnName)], sep=""), header=T, sep='\t')
+Total.flower.cover <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Total.flower.cover", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 ```
 
 
@@ -674,7 +659,7 @@ according to forage quality estimation based on alfalfa (medicago sativa) values
 calc forage quality of each plot separately (all years separately), then calc mean of each plot over the years. Plant.ADF, Plant.NDF, PlantN.conc (18866; only 2009 data used) [Crude.protein = 6.25*ShootN.conc; DDM = 88.9-(0.779*Shoot.ADF); DMI = 120/Shoot.NDF RFV = (DDM*DMI)/1.29 forgage.quality = apply(scale(cbind(RFV, Crude.protein)),1,mean)].
 
 ```{r, eval=F}
-# forage.quality <- data.table::fread(paste(pathtodata, info_data$subpath[grep("forage.quality", info_data$ColumnName)], sep=""), header=T, sep='\t')
+# forage.quality <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("forage.quality", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 # list_raw_functions[["forage.quality"]] <- forage.quality; rm(forage.quality)
 
 # The code below is possibly helpful to calculate forage quality once this service is planned to get calculated. But it is not finished and tested code as the other.
@@ -709,5 +694,5 @@ calc forage quality of each plot separately (all years separately), then calc me
 # Charismatic butterflys
 Diversity and abundance of day active butterflies and day-active moths along a land use intensity gradient (2008)
 ```{r, eval=F}
-butterflys <- data.table::fread(paste(pathtodata, info_data$subpath[grep("Charism.butterfly.Abund", info_data$ColumnName)], sep=""), header=T, sep='\t')
+butterflys <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Charism.butterfly.Abund", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 ```
