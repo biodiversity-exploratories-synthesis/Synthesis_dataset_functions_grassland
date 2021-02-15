@@ -6,7 +6,7 @@ Code used for generation of the 2019 synthesis grassland function dataset.
 - `1read_raw_dataset.Rmd` : to read in raw data. Start with this file, after you downloaded all required datasets from Bexis and unzipped them. It contains minor calculations, but mostly it contains code to clean and format the data for the next script.
 - `2calc_raw_dataset.Rmd`  : It takes the output from file 1, and calculates the functions dataset from it. Finally, it saves the constructed functions dataset as a .csv file under a name of your choice. *Note*: the part with saving output is outcommented (eval=F). Please run manually or enable automatic running (setting eval=T).
 - `input_for_2calc.R` : An R script which can be run before calculating mini-multifunctionalities. It checks the correlations between functions and performs a PCA.
-- `3explore_functions_dataset` : An example of how to explore missing data and correlations in the previously generated dataset.
+- `3explore_functions_dataset.R` : An example of how to explore missing data and correlations in the previously generated dataset.
 - `multidiversity.R` : contains required function. Is sourced by the above file.
 
 
