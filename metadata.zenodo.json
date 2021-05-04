@@ -1,0 +1,28 @@
+{
+  "description": "<p>This code was used to create <a href=\"https://www.bexis.uni-jena.de/ddm/data/Showdata/27087\">dataset 27087 \"Assembled ecosystem measures from grassland EPs (2008-2018) for multifunctionality synthesis - June 2020\"</a> (currently under embargo). Synthesis (core) project of the <a href=\"http://www.biodiversity-exploratories.de/\">Biodiversity Exploratories</a>.</p>", 
+  "license": "CC-BY-NC-4.0 (Creative Commons Attribution Non Commercial 4.0 International)", 
+  "title": "Code to create Assembled ecosystem measures from grassland EPs (2008-2018) for multifunctionality synthesis - June 2020", 
+  "version": "v1.0.0", 
+  "upload_type": "software", 
+  "publication_date": "2021-05-04", 
+  "creators": [
+    {
+      "affiliation": "Institute of Plant Sciences, University of Bern, Biodiversity Exploratories", 
+      "name": "Noelle Schenk",
+      "name" : "Caterina Penone"
+    }
+    ], 
+  "access_right": "open", 
+  "related_identifiers": [
+    {
+      "scheme": "url", 
+      "identifier": "https://github.com/biodiversity-exploratories-synthesis/Synthesis_dataset_functions_grassland/tree/v1.0.0", 
+      "relation": "isSupplementTo"
+    }, 
+    {
+      "scheme": "doi", 
+      "identifier": "10.5281/zenodo.4736428", 
+      "relation": "isVersionOf"
+    }
+    ]
+}
