@@ -1,4 +1,6 @@
 # Synthesis_dataset_functions_grassland
+Released at Zenodo : [![DOI](https://zenodo.org/badge/181692075.svg)](https://zenodo.org/badge/latestdoi/181692075)
+
 former name : 2019_grassland_functions
 
 Code used for generation of the 2019 synthesis grassland function dataset.
