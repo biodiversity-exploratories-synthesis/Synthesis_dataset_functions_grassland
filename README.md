@@ -1,4 +1,5 @@
-# 2019_grassland_functions
+# Synthesis_dataset_functions_grassland
+former name : 2019_grassland_functions
 
 Code used for generation of the 2019 synthesis grassland function dataset.
 
