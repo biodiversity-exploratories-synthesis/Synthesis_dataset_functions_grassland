@@ -12,7 +12,8 @@ Code used for generation of the 2019 synthesis grassland function dataset.
 - `3explore_functions_dataset.R` : An example of how to explore missing data and correlations in the previously generated dataset.
 - `multidiversity.R` : contains required function. Is sourced by the above file.
 
-
+### License
+This project is licensed under the terms of the Creative Commons Attribution 4.0 license (cc-by-4.0).
 
 ### BExIS upload
 
