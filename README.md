@@ -27,3 +27,11 @@ This project is licensed under the terms of the Creative Commons Attribution 4.0
 
 - `soil_N_processes_minimultifunctionality_considerations.Rmd` : considerations for function selection
 
+## Next update
+For the next update, following new datasets can be included (need to be checked if actually fitting):
+- Arthropods (core) project
+  - Dung and seed depletion (only VIPs), e.g. in 2020 (30938)
+- SCALEMIC
+  - Soil enzyme activities of all grassland EPs, soil sampling campaign (SSC) 2017, SCALEMIC (26147)
+  - Physico-chemical soil properties 2017 (25586)
+  - Microbial soil properties 2017 (25408)
