@@ -65,8 +65,10 @@ Pshoot.2014,Pshoot_2014,2014,Pshoot
 Root.biomass,Root_biomass,2011,Root_biomass
 Root.decomposition,Root_decomposition,2012,Root_decomposition
 Soil.C.stock,Soil_C_stock,2011,Soil_C_stock
+Soil.C.concentration,Soil_C_concentration,2011,Soil_C_concentration
 SoilOrganicC,SoilOrganicC,2011,SoilOrganicC
 Total.pollinators,Total_pollinators,2008,Total_pollinators
+Soil.depth,Soil_depth,2006,Soil_depth
 Urease,Urease,2011,Urease
 Xylosidase,Xylosidase,2011,Xylosidase
 amoA_AOA.2011,amoA_AOA_2011,2011,amoA_AOA
