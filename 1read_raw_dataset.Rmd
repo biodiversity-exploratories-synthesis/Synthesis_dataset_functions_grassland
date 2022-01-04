@@ -728,3 +728,4 @@ plot(test$Soil.depth, test$Kerntiefe)
 test[which(abs(test$Soil.depth - test$Bohrlochtiefe) > 1),]
 ```
 
+Missing **unit**. All soil depths are > 10. Soil Organic C was measured in the upper 10 cm of the soil. It is plausible that this depth was decided based on the soil depth measure. We therefore assume soil depth in [cm].
