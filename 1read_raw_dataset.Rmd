@@ -716,3 +716,15 @@ soildepth <- merge(soildepth, plotnames, by = c("PlotID", "Exploratory"), all.x 
 raw_functions <- merge(raw_functions, soildepth[, .(Plot, Soil.depth)], all = T)
 ```
 
+Documentation about the source of "Grassland EP soil descriptors.txt" is missing, but most probably the soil.depth data is stemming from "6241_122_Dataset", variable "Bohrlochtiefe".
+See the code below to show similarity of the dataset. Note that for the analysis, the assembled data was used, but the source dataset was referred to in the metadata.
+```{r, eval = F}
+ev_soildepth <- data.table::fread(paste(pathtodata, "6241_122_Dataset/6241_122_data.csv", sep = ""), fill = T)
+ev_soildepth <- ev_soildepth[, .(Plotid, Bohrlochtiefe, Kerntiefe)]
+data.table::setnames(ev_soildepth, old = "Plotid", new = "plotid")
+test <- merge(soildepth, ev_soildepth, by = "plotid", all.x = T)
+plot(test$Soil.depth, test$Bohrlochtiefe)
+plot(test$Soil.depth, test$Kerntiefe)
+test[which(abs(test$Soil.depth - test$Bohrlochtiefe) > 1),]
+```
+
