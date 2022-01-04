@@ -313,26 +313,27 @@ NH4.2014 <- NH4.2014[!which(duplicated(NH4.2014$Plot_ID)),]
 # "nd" (not detectable) is automatically translated to NA
 NH4.2014$NH4 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NH4))
 NH4.2014$NO3 <- as.numeric(sub("bdl", "0.000000", NH4.2014$NO3))
+NH4.2014$PNR[which(NH4.2014$PNR == "nd")] <- NA # avoid warning by manually convert to NA
 NH4.2014$PNR <- as.numeric(sub("bdl", "0.000000", NH4.2014$PNR))
 data.table::setnames(NH4.2014, old=c("Plot_ID", "NH4", "NO3", "PNR"), new=c("Plot", "NH4.2014", "NO3.2014", "Potential.nitrification2014"))
 raw_functions <- merge(raw_functions, NH4.2014, by="Plot", all=T); rm(NH4.2014)
 ```
 
 
-# Bulk density and soil C stock
+# Bulk density and soil C concentration
 **Bulk density** : Increased use of machine compact the soil. At a given point, the root growth is impaired.
 
-**soil C stock** : C in soil
+**soil C concentration** : C in soil (former name : soil C stock)
 
-Determination bulk density and calculated CN stocks for the upper 10 cm of the mineral soil. Dry combustion of soil at a temperature of 1100°C and subsequent determination of evolving CO2 and N2 with a Thermal Conductivity Detector (TCD).
+Determination bulk density and calculated CN stocks (concentrations) for the upper 10 cm of the mineral soil. Dry combustion of soil at a temperature of 1100°C and subsequent determination of evolving CO2 and N2 with a Thermal Conductivity Detector (TCD).
 
 [g/cm^3]
 
 ```{r}
 #2011
-Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Soil.C.stock", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
+Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Soil.C.concentration", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Bulk.density.soil.C.stock.2011 <- Bulk.density.soil.C.stock.2011[Type == "G"]
-Bulk.density.soil.C.stock.2011 <- data.table::setnames(Bulk.density.soil.C.stock.2011[,c("EP_Plotid", "BD", "OC_stock")], old=c("EP_Plotid", "BD", "OC_stock"), new=c("Plot", "Bulk.density2011", "Soil.C.stock"))
+Bulk.density.soil.C.stock.2011 <- data.table::setnames(Bulk.density.soil.C.stock.2011[,c("EP_Plotid", "BD", "OC_stock")], old=c("EP_Plotid", "BD", "OC_stock"), new=c("Plot", "Bulk.density2011", "Soil.C.concentration"))
 raw_functions <- merge(raw_functions, Bulk.density.soil.C.stock.2011, by="Plot", all=T); rm(Bulk.density.soil.C.stock.2011)
 
 # 2014
