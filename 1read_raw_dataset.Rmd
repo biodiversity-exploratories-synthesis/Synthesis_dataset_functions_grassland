@@ -698,3 +698,20 @@ Diversity and abundance of day active butterflies and day-active moths along a l
 ```{r, eval=F}
 butterflys <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Charism.butterfly.Abund", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 ```
+
+
+# Soil depth
+For calculation of soil stocks, the soil depth is needed.
+```{r}
+soildepth <- data.table::fread(paste(pathtodata, "Grassland EP soil descriptors.txt", sep = ""))
+soildepth <- soildepth[, .(plotid, Exploratory, Soil.depth)]
+data.table::setnames(soildepth, old = "plotid", new = "PlotID")
+# translate plotnames to current ones
+plotnames <- data.table::fread(paste(pathtodata, "20826_plotNames.txt", sep = ""))
+plotnames <- plotnames[, .(EP_PlotID, PlotID, Exploratory)]
+data.table::setnames(plotnames, old = c("EP_PlotID"), new = "Plot")
+
+soildepth <- merge(soildepth, plotnames, by = c("PlotID", "Exploratory"), all.x = T); rm(plotnames)
+raw_functions <- merge(raw_functions, soildepth[, .(Plot, Soil.depth)], all = T)
+```
+
