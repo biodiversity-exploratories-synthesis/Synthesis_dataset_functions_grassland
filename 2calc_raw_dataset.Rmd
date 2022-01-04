@@ -140,7 +140,7 @@ means <- means[, c("Plot", "mean_of_years", "unscaled_mean")]
 one <- scale(means$unscaled_mean)
 two <- scale(means$mean_of_years)
 test <- cbind(one, two); rm(one); rm(two)
-test2 <- data.table::melt(test)
+test2 <- data.table::melt(test) #TODO : solve melt warning
 
 scmeans <- ggplot2::ggplot(test2, ggplot2::aes(factor(Var2), value, fill = Var2)) + ggplot2::geom_violin() + 
   ggplot2::scale_color_brewer(palette="Set1")
@@ -716,6 +716,24 @@ raw_functions[is.nan(P_leaching_risk_comb), P_leaching_risk_comb := NA]
 
 ## N_loss_comb
 Could be calculated as P_loss_comb, if NRI and N loss (or N leaching risk) were measured in the same year.
+
+
+# Soil C stock
+Multiply Soil C concentration (C in first 10 cm of soil) with soil depth [cm].
+
+Soil.C.stock = Soil.C.concentration * (Soil.depth / 10)
+
+```{r}
+raw_functions[, Soil.C.stock := Soil.C.concentration * (Soil.depth / 10)]
+```
+```{r, eval = F}
+plot(raw_functions$Soil.C.concentration, raw_functions$Soil.C.stock)
+
+ggplot(raw_functions, aes(x = Soil.C.stock, y = Soil.C.concentration, color = Explo)) +
+  geom_point()
+```
+ALTERNATIVE : could calculate soil C stocks from both Soil.C.concentration and SoilOrganicC and take mean of both. Preferred to rely on one measurement only.
+
 
 # store assembled dataset
 clean unneeded variables
