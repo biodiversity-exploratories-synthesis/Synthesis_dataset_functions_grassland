@@ -35,3 +35,4 @@ For the next update, following new datasets can be included (need to be checked 
   - Soil enzyme activities of all grassland EPs, soil sampling campaign (SSC) 2017, SCALEMIC (26147)
   - Physico-chemical soil properties 2017 (25586)
   - Microbial soil properties 2017 (25408)
+- 17086 : Soil dataset also has N concentrations measured, which can be used to build an N stock measure. Could add that.
