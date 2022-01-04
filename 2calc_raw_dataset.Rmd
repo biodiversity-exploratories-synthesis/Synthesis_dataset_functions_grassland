@@ -140,7 +140,7 @@ means <- means[, c("Plot", "mean_of_years", "unscaled_mean")]
 one <- scale(means$unscaled_mean)
 two <- scale(means$mean_of_years)
 test <- cbind(one, two); rm(one); rm(two)
-test2 <- data.table::melt(test) #TODO : solve melt warning
+test2 <- reshape2::melt(test)
 
 scmeans <- ggplot2::ggplot(test2, ggplot2::aes(factor(Var2), value, fill = Var2)) + ggplot2::geom_violin() + 
   ggplot2::scale_color_brewer(palette="Set1")
