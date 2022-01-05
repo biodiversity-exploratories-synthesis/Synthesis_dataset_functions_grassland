@@ -1,14 +1,14 @@
 #####################################
 #
-# Bring 27088 to wide format
+# Bring downloaded dataset to wide format
 #
 #####################################
 # by Noelle Schenk
+# last edit : 05.01.22
 
 ##
 # goals of the script : 
-#  - reformat bexis dataset to a wide format where all measured functions (from several years)
-#     are listed in separate columns
+#  - reformat bexis dataset to a wide format (all functions for every year in separate columns)
 # example (with invented values): 
 #     before : 
 #             Plot  Year  Biomass
@@ -24,11 +24,8 @@
 
 ##
 # requirements
-# - dataset 27087 and 27088 from bexis
-#    - dataset 27088 : open the excel sheet "synthesis_grassland_function_metadata_ID27088",
-#          convert the first tab "synthesis_grassland_function_metadata_ID26726" to csv
-#          WITH ; AS DELIMINER (because "," is used within cells).
-#          this new .csv file is used for the conversion.
+# - dataset 27087 with attachements from bexis
+#    - attachments : "synthesis_grassland_function_metadata_ID27087.csv" is used for the conversion.
 
 ##
 # install required packages
@@ -38,21 +35,26 @@ install.packages("reshape2")
 
 ##
 # load required packages
-require(data.table)
-require(reshape2)
+library(data.table)
+library(reshape2)
 
 ##
 # load datasets
 # path_to_bexis_datasets <- "" # fill in path to the BExIS dataset.
-additional_info <- fread(paste(path_to_bexis_datasets, "27088_Additional metadata of dataset 27087 Assembled ecosystem measures from grassland EPs (2008-2018) for multifunctionality synthesis - June 2020/synthesis_grassland_function_metadata_ID27088.csv", sep = ""))
+path_to_bexis_datasets <- "~/IPS_SYNCFILES_27087_synthesis_grassland_functions/NEW_functions_dataset_needs_to_be_uploaded/"
+additional_info <- fread(paste(path_to_bexis_datasets, "synthesis_grassland_function_metadata_ID27087.csv", sep = ""))
 additional_info <- additional_info[, .(ColumnName, AggregatedColumnName, codedYear)]
 setnames(additional_info, old = c("ColumnName", "codedYear"), new = c("variable", "Year"))
-original_synth_func <- fread(paste(path_to_bexis_datasets, "27087_Assembled ecosystem measures from grassland EPs (2008-2018) for multifunctionality synthesis - June 2020_4.1.15/27087.txt", sep = ""))
+#TODO : take out the following line, uncomment the last line
+original_synth_func <- fread("~/IPS_SYNCFILES_27087_synthesis_grassland_functions/NEW_functions_dataset_needs_to_be_uploaded/jan2022_raw_functions_dataset_bexisformat_long.csv")
+original_synth_func[, Soil_depth := NULL]
+original_synth_func[, Soil_C_concentration := NULL]
+# original_synth_func <- fread(paste(path_to_bexis_datasets, "27087_21_data.csv", sep = ""))
 
 ##
 # get function-year combinations as columns
 # make format even longer to obtain a column "Year" and a column "function"
-synth_func <- melt(original_synth_func, id.vars = c("Plot", "Plotn", "Explo", "Year"))
+synth_func <- data.table(melt(original_synth_func, id.vars = c("Plot", "Plotn", "Explo", "Year")))
 sum(is.na(synth_func$value))
 # delete all missing function-year combinations (without excluding NA values)
 synth_func <- synth_func[!value %in% "NM"]
@@ -60,20 +62,21 @@ sum(is.na(synth_func$value))
 
 synth_func <- merge(synth_func, additional_info, by = c("variable", "Year"))
 synth_func <- synth_func[, .(AggregatedColumnName, Plot, Plotn, Explo, value)]
-synth_func <-dcast(synth_func, Plot + Plotn + Explo ~ AggregatedColumnName, value.var = "value")
+synth_func <- data.table(dcast(synth_func, Plot + Plotn + Explo ~ AggregatedColumnName, value.var = "value"))
 
 ##
 # quality control
 # select some random functions from the old format and the new format and visually
 #    check if the values are still exactly the same (perfect correlation).
 # synth_func is the newly created dataset, original_synth_func is the read in dataset
-plot(synth_func$Total.pollinators, original_synth_func[!Total_pollinators %in% "NM", Total_pollinators])
-plot(synth_func$Urease, original_synth_func[!Urease %in% "NM", Urease])
-plot(synth_func$amoA_AOA.2016, original_synth_func[Year == "2016", amoA_AOA])
+#   taking out "NM" from the original and "NA" from the wide format.
+plot(synth_func[!is.na(Total.pollinators), Total.pollinators], original_synth_func[!Total_pollinators %in% "NM", Total_pollinators])
+plot(synth_func[!is.na(Urease), Urease], original_synth_func[!Urease %in% "NM", Urease])
+plot(synth_func[!is.na(amoA_AOA.2016), amoA_AOA.2016], original_synth_func[Year == "2016",][!amoA_AOA %in% "NM", amoA_AOA])
 plot(synth_func$Groundwater.recharge2013, original_synth_func[Year == 2013, Groundwater_recharge])
-plot(synth_func$Soil.C.stock, original_synth_func[!Soil_C_stock %in% "NM", Soil_C_stock])
+plot(synth_func[!is.na(Soil.C.stock), Soil.C.stock], original_synth_func[!Soil_C_stock %in% "NM", Soil_C_stock])
 # quality control successful?
 
 ##
 # save reformatted file
-fwrite(synth_func, file = "27087_reformatted.csv", sep = ";")
+fwrite(synth_func, file = "bexis_to_wide_format_output", sep = ";")
