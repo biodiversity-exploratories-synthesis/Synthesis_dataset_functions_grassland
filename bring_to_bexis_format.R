@@ -36,18 +36,21 @@ rm(ordered_synthesisdataset)
 fwrite(synthesisdataset, file = "jan2022_raw_functions_dataset_bexisformat_long.csv", dec = ".", sep = ",", quote = F, na = "NA")
 
 
+# the below lines are generating upload helpers. Since the transition to Bexis2, the lines were not tested
+# any more. They are left here to be tested for the next update.
+
 ####
 # METADATA
 #TODO : below here not updated.
-metadata <- fread("<path-to-synthesis-dataset>/synthesis_grassland_function_metadata_ID26726.csv", sep = ";")
-setnames(varkey, old = c("oldnames", "Year"), new = c("ColumnName", "codedYear"))
-metadata <- merge(varkey[, .(ColumnName, short_varname, codedYear)], metadata, by = "ColumnName")
-setnames(metadata, old = "short_varname", new = "ShortColumnName")
-fwrite(metadata, file = "synthesis_grassland_function_metadata_<ID>.csv", sep = ";")
+# metadata <- fread("<path-to-synthesis-dataset>/synthesis_grassland_function_metadata_ID26726.csv", sep = ";")
+# setnames(varkey, old = c("oldnames", "Year"), new = c("ColumnName", "codedYear"))
+# metadata <- merge(varkey[, .(ColumnName, short_varname, codedYear)], metadata, by = "ColumnName")
+# setnames(metadata, old = "short_varname", new = "ShortColumnName")
+# fwrite(metadata, file = "synthesis_grassland_function_metadata_<ID>.csv", sep = ";")
 
 
 ####
 # UPLOAD HELPER
-upload_helper <- unique(metadata[, .(ShortColumnName, typeOfVariable, units, `short description`)])
-upload_helper[, Block := 0]
-fwrite(upload_helper, file = "bexis_metadata_upload_helper.csv", sep = ";")
+# upload_helper <- unique(metadata[, .(ShortColumnName, typeOfVariable, units, `short description`)])
+# upload_helper[, Block := 0]
+# fwrite(upload_helper, file = "bexis_metadata_upload_helper.csv", sep = ";")
