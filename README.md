@@ -36,8 +36,7 @@ For the next update, following new datasets can be included (need to be checked 
   - Physico-chemical soil properties 2017 (25586)
   - Microbial soil properties 2017 (25408)
 - 17086 : Soil dataset also has N concentrations measured, which can be used to build an N stock measure. Could add that.
-- Soil.C.stock is renamed to Soil.C.concentration
-- Soil.depth is added
-    - clarify if Bohrlochtiefe is correct
-- Soil.C.stock is calculated with help of soil.depth
+- Soil C stock : check if 2014 dataset is included (BExIS ID20266), include OC stock 2017 and (if already uploaded) 2021 
 - Biomass of new years (+ other vars from new years)
+
+
