@@ -38,5 +38,5 @@ For the next update, following new datasets can be included (need to be checked 
 - 17086 : Soil dataset also has N concentrations measured, which can be used to build an N stock measure. Could add that.
 - Soil C stock : check if 2014 dataset is included (BExIS ID20266), include OC stock 2017 and (if already uploaded) 2021 
 - Biomass of new years (+ other vars from new years)
-
+- Soil respiration 2018 and 2019, Apostolakis, Schöning, Schrumpf, Klötzing, Trumbore
 
