@@ -34,17 +34,18 @@ Example : (if the BExIS unzipped data files (folders) are stored in the folder "
 
 `pathtodata <- "C:/Documents/Projects/Synthesis/Functions_dataset/BExIS_raw_data/"`
 
-pathtodata is pasted together with the name of the zip file, which is stored in dataset 27088: please export that to "27088_helper.csv" as described below:
-dataset 27088 : open the excel sheet "synthesis_grassland_function_metadata_ID27088", convert the first tab "synthesis_grassland_function_metadata_ID26726" to csv WITH ; AS DELIMINER (because "," is used within cells). Store this new .csv file as "27088_helper.csv".
+pathtodata is pasted together with the name of the zip file, which is stored in the file "27088_helper.csv". "27088_helper.csv" is stored together with the code, as well as under "helper_data".
+TODO : the version in "helper_data" will be removed.
 
 Reading pathtodata and the file "27088_helper.csv"
 ```{r}
 #USER : insert needed path.
 # NOTE : don't forget to end with / (unix) or \\ (windows)
-# pathtodata <- "C:/Documents/Projects/Synthesis/Functions_dataset/BExIS_raw_data/"
+pathtodata <- "/run/user/1000/gvfs/smb-share:server=nas-ips,share=ips/groups/planteco/PROJECTS/Exploratories Synthesis/Research Projects/27087_synthesis_grassland_functions_construction/raw_data/"
 
 #USER : insert path to 27088_helper.csv
-# info_data <- data.table::fread("C:/Documents/Projects/Synthesis/Functions_dataset/27088_helper.csv")
+# info_data <- data.table::fread("/run/user/1000/gvfs/smb-share:server=nas-ips,share=ips/groups/planteco/PROJECTS/Exploratories Synthesis/Research Projects/27087_synthesis_grassland_functions_construction/helper_data/27088_helper.csv")
+info_data <- data.table::fread("27088_helper.csv")
 ```
 
 
