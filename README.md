@@ -41,3 +41,4 @@ For the next update, following new datasets can be included (need to be checked 
     - clarify if Bohrlochtiefe is correct
 - Soil.C.stock is calculated with help of soil.depth
 - Biomass of new years (+ other vars from new years)
+- Dung removal and NO3.2004 have negative values, because different dung types were scaled in order to aggregate them. --> In future, think about how to avoid negative values. (units are e.g. g/m^2)
