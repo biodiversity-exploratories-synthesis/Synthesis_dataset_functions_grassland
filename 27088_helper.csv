@@ -1,0 +1,89 @@
+ColumnName;AggregatedColumnName;codedYear;purpose;noPlots;dataID;subpath_unix;Projectname
+16S_NB;16S_NB;2016;soilNitrateflxs;149;21547;21547_Nitrifiers Abundances at Grassland EPs_1.6.8/21547.txt;ForNit
+Aggregation;Aggregation;2011;;93;14846;14846_Soil aggregation and hyphal length in soil cores on 93 grassland EPs, 2011_1.1.5_PublicDataset/14846.txt ;DYNSOILS
+Biomass;Biomass;4444;;142;assembled data;;
+Biomass;Biomass2008;2008;;133;5401;5401_plant biomass and C N values on 150 grassland EPs in 2008_1.0.2_PublicDataset/5401.txt;Botany (core)
+Biomass;Biomass2009;2009;Biomass;149;16209;16209_Biomass of 150 EPs 2009_3.1.5_PublicDataset/16209.txt;Botany (core)
+Biomass;Biomass2010;2010;Biomass;148;12706;12706_Measurement of biomass (2010, all grassland EPs)_1.1.8_PublicDataset/12706.txt ;Botany (core)
+Biomass;Biomass2011;2011;Biomass, PRI.2011 ;149;14346;14346_Measurement of biomass (2011, all grassland EPs)_1.4.5_PublicDataset/14346.txt ;Botany (core)
+Biomass;Biomass2012;2012;Biomass;150;14986;14986_Measurement of biomass (2012, all grassland EPs)_1.1.3_PublicDataset/14986.txt ;Botany (core)
+Biomass;Biomass2013;2013;Biomass;149;16786;16786_Measurement of biomass (2013, all grassland EPs)_1.1.2_PublicDataset/16786.txt ;Botany (core)
+Biomass;Biomass2014;2014;Biomass, PRI;150;19807;19807_Vegetation Records for Grassland EPs in 2014, Header Data without Species Identities (incl. biomass)_1.1.10_PublicDataset/19807.txt ;Botany (core)
+Biomass;Biomass2015;2015;Biomass;148;19809;19809_Vegetation Records for Grassland EPs in 2015, Header Data without Species Identities (incl. biomass)_1.1.8/19809.txt ;Botany (core)
+Biomass;Biomass2016;2016;Biomass;150;21187;21187_Vegetation Records for Grassland EPs in 2016, Header Data without Species Identities (incl. biomass)_4.1.2/21187.txt ;Botany (core)
+Biomass;Biomass2017;2017;Biomass;150;23486;23486_Vegetation Records for Grassland EPs in 2017, Header Data without Species Identities (incl. biomass)_1.1.2/23486.txt ;Botany (core)
+Bulk_density;Bulk.density2011;2011;PRI.2011;146;17086;17086_MinSoil_2011_Mineral_Soil_Bulk_Density_CN_stocks_1.1.4/17086.txt;Soil abiotic (core)
+Bulk_density;Bulk.density2014;2014;PRI, NRI ;150;20249;20249_SSC 2014, EP grassland, physico-chemical soil properties,SCALEMIC_1.2.4/20249.txt ;SCALEMIC
+DEA;DEA;2011;DEA.inverted, soilNitrateflxs ;150;20246;20246_SSC 2011, EP grassland, soil enzyme activities, SCALEMIC_1.9.9/20246.txt;SCALEMIC
+DEA_inverted;DEA.inverted;2011;soilNitrateflxs;150;assembled data;20246_SSC 2011, EP grassland, soil enzyme activities, SCALEMIC_1.9.9/20246.txt ;
+Explo;Explo;4444;;150;;;
+Groundwater_recharge;Groundwater.recharge;4444;;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2010;2010;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2011;2011;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2012;2012;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2013;2013;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2014;2014;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2015;2015;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Groundwater_recharge;Groundwater.recharge2016;2016;Groundwater.recharge;150;22746;22746_Annual water fluxes grassland EPs 2010-2016_1.1.2/22746.txt;BECycles
+Litter_decomposition;Litter.decomposition;2013;;149;18926;18926_Litter decomposition (2013, all grassland EPs)_1.1.4_PublicDataset/18926.txt ;Botany (core)
+NH4;NH4.2014;2014;NRI;150;19847;19847_Nitrogen Pools and Potential Nitrification taken at Soil Sampling Campaign 2014_1.2.9_PublicDataset/19847.txt;ForNit
+NO3;NO3.2014;2014;NRI;150;19847;19847_Nitrogen Pools and Potential Nitrification taken at Soil Sampling Campaign 2014_1.2.9_PublicDataset/19847.txt;ForNit
+NRI;NRI;2014;no, because N_leaching risk is too similar (and a direct measure);150;assembled;;
+N_Acetyl_beta_Glucosaminidase;N_Acetyl_beta_Glucosaminidase;2011;soilCflxs;147;20246;20246_SSC 2011, EP grassland, soil enzyme activities, SCALEMIC_1.9.9/20246.txt ;SCALEMIC
+N_leaching_risk;N_leaching_risk2015;2015;;149;19853;19853_Resin bags_ mean N concentrations in soil at all grassland EPs, 2015, ESCAPE_1.1.9/19853.txt ;ESCAPE
+NaHCO3_Pi;NaHCO3.Pi;2008;PRI.2011;113;5241;5241_Soil Phosphorus Fractions_4.7.19_PublicDataset/5241.txt;DYNPHOS
+Nmic;Nmic.2011;2011;;150;20250;20250_Microbial soil properties of all grassland EPs, soil sampling campaign (SSC) 2011, SCALEMIC_1.3.12/20250.txt ;SCALEMIC
+Nmic;Nmic.2014;2014;NRI;150;20251;20251_Microbial soil properties of all grassland EPs, soil sampling campaign (SSC) 2014, SCALEMIC_1.2.13/20251.txt ;SCALEMIC
+Nshoot;Nshoot.2009;2009;;121;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Nshoot;Nshoot.2010;2010;;148;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Nshoot;Nshoot.2011;2011;;147;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Nshoot;Nshoot.2012;2012;;150;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Nshoot;Nshoot.2013;2013;;149;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Nshoot;Nshoot.2014;2014;NRI;150;21087;21087_Aboveground plant biomass nutrient contents in grasslands 2014-2016 (NIRS) - STOICHIO_1.4.10/21087.txt;STOICHIO
+OlsenPi;OlsenPi2014;2014;PRI;149;19286;19286_Olsen P (soil sampling campaign 2014)_1.5.7/19286.txt;DYNPHOS
+PRI;PRI;2014;;136;assembled data;;
+PRI;PRI.2011;4444;;102 (137);assembled data;;
+PRIcomb;PRIcomb;4444;;147;assembled data;;assembled data
+P_leaching_risk;P_leaching_risk2015;2015;P_leaching_risk_comb;148;20447;20447_Resin P mean values of all grassland EPs_1.1.1/20447.txt;ESCAPE
+P_leaching_risk_comb;P_leaching_risk_comb;4444;;150;0;assembled data;
+P_loss;P_loss2011;2011;P_leaching_risk_comb;150;19009;19009_Resin P (soil sampling campaign 2011)_1.1.6/19009.txt;DYNPHOS
+Parasitoid_traps;Parasitoid.traps;2008;no, too many NA;83;13350, 13347 , 13349 ;13350_Brood cell No. of trap-nesting species Alb 2008_2.2.2_PublicDataset/13350.txt, 13347_Brood cell No. of trap-nesting species Hainich 2008_2.2.2_PublicDataset/13347.txt, 13349_Brood cell No. of trap-nesting species Schorfheide 2008_2.3.4_PublicDataset/13349.txt;InsectScale
+Phosphatase;Phosphatase;2011;;150;20246;19009_Resin P (soil sampling campaign 2011)_1.1.6/19009.txt;SCALEMIC
+Plot;Plot;4444;;150;;;
+Plotn;Plotn;4444;;150;;;
+Pmic;Pmic.2011;2011;PRI.2011;143;15766;15766_Microbial phosphorus in soil (soil sampling campaign 2011)_1.3.11/15766.txt;DYNPHOS
+Pmic;Pmic.2014;2014;PRI;137;20286;20286_Microbial phosphorus in soil (soil sampling campaign 2014)_1.1.0_PublicDataset/20286.txt;DYNPHOS
+Potential_nitrification;Potential.nitrification;4444;;150;assembled data;;
+Potential_nitrification;Potential.nitrification2011;2011;potential.nitrification;149;13986;13986_Abundance of nitrogen fixing microbes and ammonia oxidizers in grassland _1.2.9_PublicDataset/13986.txt;InDiLaNi
+Potential_nitrification;Potential.nitrification2014;2014;potential.nitrification;149;19847;19847_Nitrogen Pools and Potential Nitrification taken at Soil Sampling Campaign 2014_1.2.9_PublicDataset/19847.txt;ForNit
+Pshoot;Pshoot.2009;2009;;120;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Pshoot;Pshoot.2010;2010;;148;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Pshoot;Pshoot.2011;2011;PRI.2011;147;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Pshoot;Pshoot.2012;2012;;150;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Pshoot;Pshoot.2013;2013;;149;18866;18866_BioComp plant biomass nutrients in grasslands 2009-2013 (NIRS)_1.2.11/18866.txt;BioComp
+Pshoot;Pshoot.2014;2014;PRI;150;21087;21087_Aboveground plant biomass nutrient contents in grasslands 2014-2016 (NIRS) - STOICHIO_1.4.10/21087.txt;STOICHIO
+Root_biomass;Root.biomass;2011;;150;14448;14448_MinSoil_2011_Roots_Biomass_1.1.10/14448.txt;Soil abiotic (core)
+Root_decomposition;Root.decomposition;2012;;137;16666;16666_MinSoil_2011_Root_decomposition_2.1.2/16666.txt;Soil abiotic (core)
+Soil_C_concentration;Soil.C.concentration;2011;no, because is stock and harder to interpret as function thank C fluxes ;146;17086;17086_MinSoil_2011_Mineral_Soil_Bulk_Density_CN_stocks_1.1.4/17086.txt;Soil abiotic (core)
+SoilOrganicC;SoilOrganicC;2011;no, because is stock and harder to interpret as function than C fluxes;150;14446;14446_MinSoil_2011_Mineral_Soil_CN_Concentrations_1.5.6/14446.txt;Soil abiotic (core)
+Total_pollinators;Total.pollinators;2008;;119;15086;15086_flower visitor interactions 2008-only pollinators_1.1.26_PublicDataset/15086.txt;Response
+Urease;Urease;2011;soilAmmoniaflxs;145;20246;19009_Resin P (soil sampling campaign 2011)_1.1.6/19009.txt;SCALEMIC
+Xylosidase;Xylosidase;2011;soilCflxs;148;20246;20246_SSC 2011, EP grassland, soil enzyme activities, SCALEMIC_1.9.9/20246.txt ;SCALEMIC
+amoA_AOA;amoA_AOA.2011;2011;soilAmmoniaflxs;150;13986;13986_Abundance of nitrogen fixing microbes and ammonia oxidizers in grassland _1.2.9_PublicDataset/13986.txt;InDiLaNi
+amoA_AOA;amoA_AOA.2016;2016;soilAmmoniaflxs;149;21547;21547_Nitrifiers Abundances at Grassland EPs_1.6.8/21547.txt;ForNit
+amoA_AOB;amoA_AOB.2011;2011;soilAmmoniaflxs;149;13986;13986_Abundance of nitrogen fixing microbes and ammonia oxidizers in grassland _1.2.9_PublicDataset/13986.txt;InDiLaNi
+amoA_AOB;amoA_AOB.2016;2016;soilAmmoniaflxs;149;21547;21547_Nitrifiers Abundances at Grassland EPs_1.6.8/21547.txt;ForNit
+beta_Glucosidase;beta_Glucosidase;2011;soilCflxs;150;20246;20246_SSC 2011, EP grassland, soil enzyme activities, SCALEMIC_1.9.9/20246.txt ;SCALEMIC
+caterpillars_predation;caterpillars.predation;2017;;134;25807;25807_Predation rates based on dummy caterpillars measured on all EPs in 2017_1.1.0/25807.txt;Arthropods (core)
+dung_removal;dung.removal;2014;;142;21206;21206_Dungwebs Decomposition (Removal In G) 2014-2015_1.2.1/21206.txt;DUNGWEBS
+dung_removal;dung.removal2017;2017;;134;24966;24966_Arthropod mediated processes (dung and seed depletion) measured on all EPs in 2017_1.4.12;Arthropods (core)
+herbivory;herbivory.2013;2013;;145;18566;18566_Herbivory grassland 2013_1.1.1/18566.txt;Arthropods I (core)
+herbivory;herbivory.20172018;4444;;147;24086;24086_Community-level insect herbivory rates assembled from plant-species specific herbivory assessment on all EPs, 2017_2018_1.2.4/24086.txt ;FuncNet
+mAMFhyphae;mAMFhyphae;2011;no, too many NA;93;14846;14846_Soil aggregation and hyphal length in soil cores on 93 grassland EPs, 2011_1.1.5_PublicDataset/14846.txt ;DYNSOILS
+nifH;nifH;2011;soilNitrateflxs;149;13986;13986_Abundance of nitrogen fixing microbes and ammonia oxidizers in grassland _1.2.9_PublicDataset/13986.txt;InDiLaNi
+nxrA_NS;nxrA_NS;2016;soilNitrateflxs;149;21547;21547_Nitrifiers Abundances at Grassland EPs_1.6.8/21547.txt;ForNit
+pathogen_infection;pathogen.infection;2011;;142;assembled from Bexis data 24247 and external data;pathogen_infection/;
+seed_depletion;seed.depletion;2017;;131;24966;24966_Arthropod mediated processes (dung and seed depletion) measured on all EPs in 2017_1.4.12/24966.txt;Arthropods (core)
+soilAmmoniaflxs;soilAmmoniaflxs;4444;;150;assembled data;;
+soilCflxs;soilCflxs;2011;;150;assembled data;;
+soilNitrateflxs;soilNitrateflxs;4444;;150;0;;
