@@ -3,7 +3,18 @@ Released at Zenodo : [![DOI](https://zenodo.org/badge/181692075.svg)](https://ze
 
 former name : 2019_grassland_functions
 
-Code used for generation of the 2019 synthesis grassland function dataset.
+Code used for generation of the synthesis grassland function dataset BExIS ID 27087.
+
+### License
+
+This project is licensed under the terms of the Creative Commons Attribution 4.0 license (cc-by-4.0).
+
+# Versions
+
+- March 2023 Major update (in dataset) : Error in Biomass data found : in assembled biomass dataset 31448, 2014 was completely wrong, plus smaller errors found in : 2018 (9 plots in HAI) and 2019 (very small differences in some HAI and some SCH plots).
+  The assembled biomass was not used for the functions dataset, thus the 2014 error did not affect this grassland functions dataset 27087. But the other years are corrected with the new dataset 31448. The Biomass years 2009 - 2017 were taken from 31448 now, instead of taking the individual years (because the small errors were not corrected in the individual years). Thus, the citations strings were updated as well, adding the assembled dataset 31448 as source while keeping the individual year's sources as well.
+
+# Scripts
 
 **Table of contents** : 
 
@@ -13,8 +24,7 @@ Code used for generation of the 2019 synthesis grassland function dataset.
 - `3explore_functions_dataset.R` : An example of how to explore missing data and correlations in the previously generated dataset.
 - `multidiversity.R` : contains required function. Is sourced by the above file.
 
-### License
-This project is licensed under the terms of the Creative Commons Attribution 4.0 license (cc-by-4.0).
+
 
 ### BExIS upload
 
@@ -22,14 +32,17 @@ This project is licensed under the terms of the Creative Commons Attribution 4.0
 - `generate_format_colnames_years_key.csv.R` generates the output:`format_colnames_years_key.csv`
 - `27626_bexis_to_wide_format` : changes back the applied format changes to the original format. Is uploaded separately as well.
 
-
-
 ### additional scripts
 
 - `create_27087_helper_from_additional_metadata.R` : creates the helper table "27087_helper.csv" from the additional metadata file : "synthesis_grassland_function_metadata_ID27087.csv"
 - `soil_N_processes_minimultifunctionality_considerations.Rmd` : considerations for function selection
 
+
+
+
+
 ## Next update
+
 For the next update, following new datasets can be included (need to be checked if actually fitting):
 - Arthropods (core) project
   - Dung and seed depletion (only VIPs), e.g. in 2020 (30938)
