@@ -14,13 +14,22 @@
 #             Plot  Year  Biomass
 #             AEG1  2008  0.1
 #             AEG1  2009  0.2
-#             AEG1  4444  NM
+#             AEG1  444444  NM
 #     after :
 #             Plot  Biomass2008 Biomass2009
 #             AEG1  0.1         0.2
 
-#             In the year "4444", there was no measure on Biomass, therefore this function-year
+#             In the year "444444", there was no measure on Biomass, therefore this function-year
 #               combination is removed.
+
+##
+# Note about solved issue (4444 vs. 444444):
+# Originally, the value "4444.0" was used to encode for assembled functions.
+# Later, this was change to "444444.0" (2 digits more), to be even clearer.
+# Rows can not be deleted from uploaded datasets in BExIS version updates.
+# Therefore, all rows with Year == "4444.0" are set to "NM"= "not measured".
+# This automatically removes all entries for year "4444.0", keeping the entries
+# for year "444444.0" with the assembled yers.
 
 ##
 # requirements
@@ -50,6 +59,8 @@ synth_func <- data.table(melt(original_synth_func, id.vars = c("Plot", "Plotn", 
 sum(is.na(synth_func$value))
 # delete all missing function-year combinations (without excluding NA values)
 synth_func <- synth_func[!value %in% "NM"]
+# Note that this will automatically take out all entries for year "4444.0" 
+#    (keeping the entries for year "444444.0")
 sum(is.na(synth_func$value))
 
 synth_func <- merge(synth_func, additional_info, by = c("variable", "Year"))
