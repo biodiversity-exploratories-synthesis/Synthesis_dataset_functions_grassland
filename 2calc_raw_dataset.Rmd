@@ -22,13 +22,10 @@ rmarkdown::render("2calc_raw_dataset.Rmd")
 
 # Biomass
 ## Biomass2009
-Take as it is, 
-because ranges are comparable to other years.
+Take as it is, because ranges are comparable to other years.
 ```{r, eval=F}
-Biomass2009 <- list_raw_functions$Biomass2009
 # how different are 2009 values of other years?
 plot(rep(2008, 150), raw_functions$Biomass2008, ylim= c(0, 2000), xlim=c(2007,2018))
-
 points(rep(2010, 150), raw_functions$Biomass2010)
 points(rep(2011, 150), raw_functions$Biomass2011)
 points(rep(2012, 150), raw_functions$Biomass2012)
@@ -38,15 +35,17 @@ points(rep(2015, 150), raw_functions$Biomass2015)
 points(rep(2016, 150), raw_functions$Biomass2016)
 points(rep(2017, 150), raw_functions$Biomass2017)
 
-points(rep(2009, 149), Biomass2009[Treatment == "K2", Biomass2009], col="green")
+points(rep(2009, 150), raw_functions$Biomass2009, col="green")
 ```
 
 attempts to correct it:
 ```{r}
-Biomass2009 <- list_raw_functions$Biomass2009
-Biomass2009 <- aggregate(Biomass2009~Plot, Biomass2009, mean)
-raw_functions <- merge(raw_functions, Biomass2009, by = "Plot", all = T) ; rm(Biomass2009)
-list_raw_functions["Biomass2009"] <- NULL
+Biomass2009 <- list_raw_functions[["Biomass2009"]]
+Biomass2009 <- aggregate(Biomass2009 ~ Plot, Biomass2009, mean)
+# compare to raw_functions one
+test <- merge(raw_functions[, .(Plot, Biomass2009)], Biomass2009, by = "Plot")
+plot(test$Biomass2009.x, test$Biomass2009.y) #  perfect correlation --> same dataset
+rm(test); rm(Biomass2009)
 ```
 
 ### linear model day vs. biomass
@@ -103,9 +102,10 @@ rm(impBiomass2009); rm(impBiomass2009I); rm(mod); rm(increase); rm(doy)
 
 ## Combining Biomass of years
 2009 - 2017 (9 years)
-Mean, not median. We excluded outliers when excluding year 2008. For combining the remaining years, outliers need to be weighted - therefore the mean.
+Mean, not median. We excluded the outlier year 2008. For combining the remaining years, outliers need to be weighted - therefore the mean.
 ```{r}
 raw_functions[, "Biomass" := apply(raw_functions[, c("Biomass2009", "Biomass2010", "Biomass2011", "Biomass2012", "Biomass2013", "Biomass2014", "Biomass2015", "Biomass2016", "Biomass2017")], 1, mean)]
+rm(Biomass)
 ```
 
 
@@ -752,7 +752,7 @@ cat("Dear user, \n
 prefix <- readline(prompt="Write now : ")
 #USER : change ~/Desktop/ to the directory where the dataset should be stored. 
 #  if you don't know what to write, just write nothing : "" (empty)
-write.table(raw_functions, file=paste("", prefix, "_raw_functions_dataset.csv", sep=""), sep=";", row.names = F)
+write.table(raw_functions, file = paste0("", prefix, "_raw_functions_dataset.csv"), sep=";", row.names = F)
 rm(prefix)
 ```
 

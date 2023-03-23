@@ -95,62 +95,27 @@ data.table::setnames(Biomass2008, old= c("PlotID", "biomass_g_m_2"), new = c("Pl
 raw_functions <- merge(raw_functions, Biomass2008, by="Plot", all=T)
 rm(Biomass2008)
 
-# 2009
-Biomass2009 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2009", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
+# 2009 - 2017
+Biomass <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2009", info_data$AggregatedColumnName)], sep=""), header=T, sep=',')
+# selecting years
+Biomass <- Biomass[Year %in% 2009:2017, ]
+# detecting missing values
+nrow(Biomass) == 150 * 9 # 1350 rows expected
+Biomass <- dcast.data.table(Biomass, EP_PlotID + Useful_EP_PlotID ~ Year, value.var = "biomass", fill = NA)
+setnames(Biomass, old = names(Biomass)[names(Biomass) %in% 2009:2017],
+         new = paste0("Biomass", names(Biomass)[names(Biomass) %in% 2009:2017]))
+setnames(Biomass, old = c("EP_PlotID", "Useful_EP_PlotID"), new = c("Plot", "Plotn"))
+names(Biomass)
+# merge to raw_functions
+raw_functions <- merge(raw_functions, Biomass, by = c("Plot", "Plotn"), all = T)
+# merge to list_raw_functions : not necessary, because no further assembling needed.
+
+# reading Biomass2009 from source file as well, for assessing quality
+Biomass2009 <- data.table::fread(paste0(pathtodata, "16209_Biomass of 150 EPs 2009_3.1.5_PublicDataset/16209.txt"), header=T, sep='\t')
 Biomass2009 <- Biomass2009[, c("GpPlotID", "Day_of_year", "Treatment", "Biomass")]
 data.table::setnames(Biomass2009, old=c("GpPlotID", "Biomass"), new=c("Plot", "Biomass2009"))
+# adding to list :
 list_raw_functions[["Biomass2009"]] <- Biomass2009; rm(Biomass2009)
-
-# 2010
-Biomass2010 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2010", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2010 <- Biomass2010[, c("PlotID", "Biomasse")]
-data.table::setnames(Biomass2010, old= c("PlotID", "Biomasse"), new = c("Plot", "Biomass2010"))
-raw_functions <- merge(raw_functions, Biomass2010, by="Plot", all=T)
-rm(Biomass2010)
-
-# 2011
-Biomass2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2011", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2011 <- Biomass2011[,c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2011, old = c("EpPlotID", "biomass_g"), new = c("Plot", "Biomass2011"))
-raw_functions <- merge(raw_functions, Biomass2011, by="Plot", all=T)
-rm(Biomass2011)
-
-# 2012
-Biomass2012 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2012", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2012 <- Biomass2012[, c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2012, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2012"))
-raw_functions <- merge(raw_functions, Biomass2012, by="Plot", all=T)
-rm(Biomass2012)
-
-# 2013
-Biomass2013 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2013", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2013 <- Biomass2013[, c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2013, old= c("EpPlotID", "biomass_g"), new= c("Plot", "Biomass2013"))
-raw_functions <- merge(raw_functions, Biomass2013, by="Plot", all=T); rm(Biomass2013)
-
-# 2014
-Biomass2014 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2014", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2014 <- Biomass2014[,c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2014, old = c("EpPlotID", "biomass_g"), new = c("Plot", "Biomass2014"))
-raw_functions <- merge(raw_functions, Biomass2014, by="Plot", all=T); rm(Biomass2014)
-
-# 2015
-Biomass2015 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2015", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t', quote="", drop=19)
-Biomass2015 <- Biomass2015[,c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2015, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2015"))
-raw_functions <- merge(raw_functions, Biomass2015, by="Plot", all=T); rm(Biomass2015)
-
-# 2016
-Biomass2016 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2016", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2016 <- Biomass2016[, c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2016, old= c("EpPlotID", "biomass_g"), new= c("Plot", "Biomass2016"))
-raw_functions <- merge(raw_functions, Biomass2016, by="Plot", all=T); rm(Biomass2016)
-
-# 2017
-Biomass2017 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Biomass2017", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
-Biomass2017 <- Biomass2017[, c("EpPlotID", "biomass_g")]
-data.table::setnames(Biomass2017, old=c("EpPlotID", "biomass_g"), new=c("Plot", "Biomass2017"))
-raw_functions <- merge(raw_functions, Biomass2017, by="Plot", all=T); rm(Biomass2017)
 ```
 
 
@@ -324,7 +289,7 @@ raw_functions <- merge(raw_functions, NH4.2014, by="Plot", all=T); rm(NH4.2014)
 # Bulk density and soil C concentration
 **Bulk density** : Increased use of machine compact the soil. At a given point, the root growth is impaired.
 
-**soil C concentration** : C in soil (former name : soil C stock)
+**soil C stock** : C concentration in soil
 
 Determination bulk density and calculated CN stocks (concentrations) for the upper 10 cm of the mineral soil. Dry combustion of soil at a temperature of 1100°C and subsequent determination of evolving CO2 and N2 with a Thermal Conductivity Detector (TCD).
 
@@ -332,7 +297,7 @@ Determination bulk density and calculated CN stocks (concentrations) for the upp
 
 ```{r}
 #2011
-Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Soil.C.concentration", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
+Bulk.density.soil.C.stock.2011 <- data.table::fread(paste(pathtodata, info_data$subpath_unix[grep("Soil.C.stock", info_data$AggregatedColumnName)], sep=""), header=T, sep='\t')
 Bulk.density.soil.C.stock.2011 <- Bulk.density.soil.C.stock.2011[Type == "G"]
 Bulk.density.soil.C.stock.2011 <- data.table::setnames(Bulk.density.soil.C.stock.2011[,c("EP_Plotid", "BD", "OC_stock")], old=c("EP_Plotid", "BD", "OC_stock"), new=c("Plot", "Bulk.density2011", "Soil.C.concentration"))
 raw_functions <- merge(raw_functions, Bulk.density.soil.C.stock.2011, by="Plot", all=T); rm(Bulk.density.soil.C.stock.2011)
@@ -570,7 +535,8 @@ The datasets are stored at the same place as other raw_datasets. Name :  "BE.fol
 
 note : code adapted from Eric Allan
 ```{r}
-path <- paste(pathtodata, info_data$subpath_unix[grep("pathogen.infection", info_data$AggregatedColumnName)], sep="")
+path <- paste0(pathtodata, 
+              unlist(strsplit(info_data$subpath_unix[grep("pathogen.infection", info_data$AggregatedColumnName)], ",\n"))[1])
 pat <- read.table(paste(path, "BE.foliar pathogen grass.txt", sep=""), header =T)
 # data is in relative abundances.
 npla <- data.table::fread(paste(pathtodata, "24247_Vegetation Records for Grassland EPs, 2008 - 2018_1.1.1/24247.txt", sep = ""), header=T, sep="\t")
@@ -728,5 +694,9 @@ plot(test$Soil.depth, test$Bohrlochtiefe)
 plot(test$Soil.depth, test$Kerntiefe)
 test[which(abs(test$Soil.depth - test$Bohrlochtiefe) > 1),]
 ```
+```{r}
+rm(soildepth)
+```
+
 
 Missing **unit**. All soil depths are > 10. Soil Organic C was measured in the upper 10 cm of the soil. It is plausible that this depth was decided based on the soil depth measure. We therefore assume soil depth in [cm].
