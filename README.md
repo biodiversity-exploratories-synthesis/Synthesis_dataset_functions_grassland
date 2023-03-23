@@ -6,6 +6,7 @@ former name : 2019_grassland_functions
 Code used for generation of the 2019 synthesis grassland function dataset.
 
 **Table of contents** : 
+
 - `1read_raw_dataset.Rmd` : to read in raw data. Start with this file, after you downloaded all required datasets from Bexis and unzipped them. It contains minor calculations, but mostly it contains code to clean and format the data for the next script.
 - `2calc_raw_dataset.Rmd`  : It takes the output from file 1, and calculates the functions dataset from it. Finally, it saves the constructed functions dataset as a .csv file under a name of your choice. *Note*: the part with saving output is outcommented (eval=F). Please run manually or enable automatic running (setting eval=T).
 - `input_for_2calc.R` : An R script which can be run before calculating mini-multifunctionalities. It checks the correlations between functions and performs a PCA.
@@ -25,6 +26,7 @@ This project is licensed under the terms of the Creative Commons Attribution 4.0
 
 ### additional scripts
 
+- `create_27087_helper_from_additional_metadata.R` : creates the helper table "27087_helper.csv" from the additional metadata file : "synthesis_grassland_function_metadata_ID27087.csv"
 - `soil_N_processes_minimultifunctionality_considerations.Rmd` : considerations for function selection
 
 ## Next update
