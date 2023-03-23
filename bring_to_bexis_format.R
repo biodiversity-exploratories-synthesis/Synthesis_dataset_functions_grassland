@@ -3,10 +3,17 @@
 # BExIS FORMAT
 #
 #######################
-require(data.table)
+#
+# Created : around June 2022 or before by noelle, last edit : 23.03.23 by noelle
+# AIM : change the wide format of raw_functions as created by 1read_raw_dataset.Rmd and 2calc_raw_dataset.Rmd
+#    to long format as used to store in BExIS.
 
+# Requirements
+require(data.table)
+# helper dataset with names
 varkey <- fread("format_colnames_years_key.csv")
 # synthesisdataset <- fread("<path-to-synthesis-dataset>/jan2022_raw_functions_dataset.csv")
+# synthesisdataset <- data.table::copy(raw_functions) # if output from 2calc_raw_dataset.Rmd is still in environment
 
 # convert numeric column to numeric
 num <- colnames(synthesisdataset)[!colnames(synthesisdataset) %in% c("Plot", "Plotn", "Explo")]
@@ -19,7 +26,7 @@ setnames(synthesisdataset, old = "variable", new = "oldnames")
 # check if all names are referred to in varkey
 all(unique(synthesisdataset$oldnames) %in% varkey$oldnames)
 all(varkey$oldnames %in% unique(synthesisdataset$oldnames))
-varkey$oldnames[which(!varkey$oldnames %in% unique(synthesisdataset$oldnames))] # only Explo, Plot and Plotn
+varkey$oldnames[which(!varkey$oldnames %in% unique(synthesisdataset$oldnames))] # only Explo, Plot and Plotn --> no problem
 
 synthesisdataset <- merge(synthesisdataset, varkey[, .(oldnames, short_varname, Year)], by = "oldnames")
 synthesisdataset[, oldnames := NULL]
@@ -29,11 +36,24 @@ synthesisdataset <- data.table(dcast(synthesisdataset, Plot + Plotn + Explo + Ye
 #   actual NA values in existing (=measured) function-year combinations
 #   is an artefact of the new format with the "year" column.
 # sort columns exactly as in metadata
-ordered_synthesisdataset <- synthesisdataset[, .(Plot, Plotn, Explo, Year, `16S_NB`, Aggregation, Biomass, Bulk_density, DEA, DEA_inverted, Groundwater_recharge, Litter_decomposition, NH4, NO3, NRI, N_Acetyl_beta_Glucosaminidase, N_leaching_risk, NaHCO3_Pi, Nmic, Nshoot, OlsenPi, PRI, PRIcomb, P_leaching_risk, P_leaching_risk_comb, P_loss, Parasitoid_traps, Phosphatase, Pmic, Potential_nitrification, Pshoot, Root_biomass, Root_decomposition, Soil_depth, Soil_C_stock, Soil_C_concentration, SoilOrganicC, Total_pollinators, Urease, Xylosidase, amoA_AOA, amoA_AOB, beta_Glucosidase, caterpillars_predation, dung_removal, herbivory, mAMFhyphae, nifH, nxrA_NS, pathogen_infection, seed_depletion, soilAmmoniaflxs, soilCflxs, soilNitrateflxs)]
+ordered_synthesisdataset <- synthesisdataset[, .(Plot, Plotn, Explo, Year, `16S_NB`, Aggregation, Biomass, 
+                                                 Bulk_density, DEA, DEA_inverted, Groundwater_recharge,
+                                                 Litter_decomposition, NH4, NO3, NRI, N_Acetyl_beta_Glucosaminidase, 
+                                                 N_leaching_risk, NaHCO3_Pi, Nmic, Nshoot, OlsenPi, PRI, 
+                                                 PRIcomb, P_leaching_risk, P_leaching_risk_comb, P_loss, 
+                                                 Parasitoid_traps, Phosphatase, Pmic, Potential_nitrification, 
+                                                 Pshoot, Root_biomass, Root_decomposition, Soil_depth, Soil_C_stock, 
+                                                 Soil_C_concentration, SoilOrganicC, Total_pollinators, Urease, 
+                                                 Xylosidase, amoA_AOA, amoA_AOB, beta_Glucosidase, 
+                                                 caterpillars_predation, dung_removal, herbivory, mAMFhyphae, nifH, 
+                                                 nxrA_NS, pathogen_infection, seed_depletion, soilAmmoniaflxs, 
+                                                 soilCflxs, soilNitrateflxs)]
+ncol(ordered_synthesisdataset) == ncol(synthesisdataset)
 names(synthesisdataset)[!names(synthesisdataset) %in% names(ordered_synthesisdataset)] # no column missed
-synthesisdataset <- copy(ordered_synthesisdataset)
+synthesisdataset <- data.table::copy(ordered_synthesisdataset)
 rm(ordered_synthesisdataset)
-fwrite(synthesisdataset, file = "jan2022_raw_functions_dataset_bexisformat_long.csv", dec = ".", sep = ",", quote = F, na = "NA")
+fwrite(synthesisdataset, file = "march2023_raw_functions_dataset_bexisformat_long.csv", dec = ".", sep = ",", quote = F, na = "NA")
+fwrite(synthesisdataset, file = "27087_data_bexisformat.csv", dec = ".", sep = ",", quote = F, na = "NA")
 
 
 # the below lines are generating upload helpers. Since the transition to Bexis2, the lines were not tested
