@@ -3,7 +3,7 @@ Released at Zenodo : [![DOI](https://zenodo.org/badge/181692075.svg)](https://ze
 
 former name : 2019_grassland_functions
 
-Code used for generation of the synthesis grassland function dataset BExIS ID 27087.
+Code used for generation of the synthesis grassland function dataset [BExIS ID 27087](https://www.bexis.uni-jena.de/ddm/data/showdata/27087).
 
 ### License
 
