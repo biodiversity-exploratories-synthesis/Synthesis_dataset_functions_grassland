@@ -48,11 +48,15 @@ ordered_synthesisdataset <- synthesisdataset[, .(Plot, Plotn, Explo, Year, `16S_
                                                  caterpillars_predation, dung_removal, herbivory, mAMFhyphae, nifH, 
                                                  nxrA_NS, pathogen_infection, seed_depletion, soilAmmoniaflxs, 
                                                  soilCflxs, soilNitrateflxs)]
+#TODO please not that 2 of the columns (soil_depth, Soil_C_concentration) could not be added to BExIS dataset yet, because
+# data structure is fixed for a given data ID --> will be added for next versiion
 ncol(ordered_synthesisdataset) == ncol(synthesisdataset)
 names(synthesisdataset)[!names(synthesisdataset) %in% names(ordered_synthesisdataset)] # no column missed
 synthesisdataset <- data.table::copy(ordered_synthesisdataset)
 rm(ordered_synthesisdataset)
 fwrite(synthesisdataset, file = "march2023_raw_functions_dataset_bexisformat_long.csv", dec = ".", sep = ",", quote = F, na = "NA")
+synthesisdataset[, Soil_depth := NULL]
+synthesisdataset[, Soil_C_concentration := NULL]
 fwrite(synthesisdataset, file = "27087_data_bexisformat.csv", dec = ".", sep = ",", quote = F, na = "NA")
 
 

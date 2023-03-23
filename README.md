@@ -55,3 +55,4 @@ For the next update, following new datasets can be included (need to be checked 
 - Biomass of new years (+ other vars from new years)
 - Dung removal and NO3.2004 have negative values, because different dung types were scaled in order to aggregate them. --> In future, think about how to avoid negative values. (units are e.g. g/m^2)
 - Soil respiration 2018 and 2019, Apostolakis, Schöning, Schrumpf, Klötzing, Trumbore
+- Soil-depth was added, could not be added to BExIS yet but please add at next update (once the data structure can be added)
