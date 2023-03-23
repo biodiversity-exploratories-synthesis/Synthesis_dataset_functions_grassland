@@ -26,26 +26,26 @@ rmarkdown::render("1read_raw_dataset.Rmd")
 
 
 # Loading raw data
-An overview of the data is given in the BExIS file 27088 (Additional information). 
+An overview of the data is given in the attached metadta of 27087.
 
-In order to read in data correctly, the path to the folder which contains the data needs to be given (as variable `pathtodata`). "The data" refers to the downloaded and unzipped data files as they are downloaded from Bexis. The names of the BExIS files are given in 27088 "zipfile name", in order to confirm versions. All extracted zip files should be stored together in the same folder (where `pathtodata` points to).
+In order to read in data correctly, the path to the folder which contains the data needs to be given (as variable `pathtodata`). "The data" refers to the downloaded and unzipped data files of the source datasets as they are downloaded from Bexis. The names of the BExIS files are given in the attached metadata file of 27087 in the column "zipfile name". Please note the versions. All extracted zip files need to be stored together in the same folder (where `pathtodata` points to).
 
-Example : (if the BExIS unzipped data files (folders) are stored in the folder "BExIS_raw_data")
+Example : (if the BExIS unzipped source data files (folders) are stored in the folder "BExIS_raw_data")
 
 `pathtodata <- "C:/Documents/Projects/Synthesis/Functions_dataset/BExIS_raw_data/"`
 
-pathtodata is pasted together with the name of the zip file, which is stored in the file "27088_helper.csv". "27088_helper.csv" is stored together with the code, as well as under "helper_data".
-TODO : the version in "helper_data" will be removed.
+pathtodata is pasted together with the name of the zip file, which is stored in the attached metadata of 27087 and the file "27087_helper.csv" (which is extracted from the attached metadata of 27087). "27087_helper.csv" is stored together with the code.
 
-Reading pathtodata and the file "27088_helper.csv"
+Reading pathtodata and the file "27087_helper.csv"
 ```{r}
 #USER : insert needed path.
 # NOTE : don't forget to end with / (unix) or \\ (windows)
 pathtodata <- "/run/user/1000/gvfs/smb-share:server=nas-ips,share=ips/groups/planteco/PROJECTS/Exploratories Synthesis/Research Projects/27087_synthesis_grassland_functions_construction/raw_data/"
 
-#USER : insert path to 27088_helper.csv
-# info_data <- data.table::fread("/run/user/1000/gvfs/smb-share:server=nas-ips,share=ips/groups/planteco/PROJECTS/Exploratories Synthesis/Research Projects/27087_synthesis_grassland_functions_construction/helper_data/27088_helper.csv")
-info_data <- data.table::fread("27088_helper.csv")
+#USER : insert path to 27087_helper.csv
+# info_data <- data.table::fread("/run/user/1000/gvfs/smb-share:server=nas-ips,share=ips/groups/planteco/PROJECTS/Exploratories Synthesis/Research Projects/27087_synthesis_grassland_functions_construction/helper_data/27087_helper.csv")
+info_data <- data.table::fread("27087_helper.csv")
+# note that the file "27087_helper.csv" is created by R script "create_27087_helper_from_additional_metadata.R"
 ```
 
 
