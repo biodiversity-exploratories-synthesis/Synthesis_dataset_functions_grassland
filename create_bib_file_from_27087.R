@@ -15,8 +15,6 @@ pathtodata <- "" # ACTION please fill here the path to the downloaded dataset
 
 dataset <- read.delim("synthesis_grassland_function_metadata_ID27087.csv", sep = ";")
 
-dataset <- read.delim(paste(pathtodata, "synthesis_grassland_function_metadata_ID27087_CITATIONS_TODO_HERE.csv", sep = ""), sep = ";")
-
 # ACTION : please fill the names of the columns (AggregatedColumnName) from 27087 that you have used.
 selected_columns <- c("Pshoot.2014", "Biomass", "soilCflxs", "soilAmmoniaflxs", "soilCflxs")
 selected_columns_citations <- dataset[which(dataset$AggregatedColumnName %in% selected_columns), "CitationString"]
