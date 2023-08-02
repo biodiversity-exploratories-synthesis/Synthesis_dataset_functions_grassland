@@ -53,6 +53,6 @@ For the next update, following new datasets can be included (need to be checked 
 - 17086 : Soil dataset also has N concentrations measured, which can be used to build an N stock measure. Could add that.
 - Soil C stock : check if 2014 dataset is included (BExIS ID20266), include OC stock 2017 and (if already uploaded) 2021 
 - Biomass of new years (+ other vars from new years)
-- Dung removal and NO3.2004 have negative values, because different dung types were scaled in order to aggregate them. --> In future, think about how to avoid negative values. (units are e.g. g/m^2)
+- Dung removal and NO3.2004 have negative values, because different dung types were scaled in order to aggregate them. --> In future, think about how to avoid negative values. (units are e.g. g/m^2). Note (2023) : in the forest functions dataset, values were scaled with scale(..., center = F, scale = T) i.e. were not centered, but scaled which lead to values > 0 (for input values >0)
 - Soil respiration 2018 and 2019, Apostolakis, Schöning, Schrumpf, Klötzing, Trumbore
 - Soil-depth was added, could not be added to BExIS yet but please add at next update (once the data structure can be added)
