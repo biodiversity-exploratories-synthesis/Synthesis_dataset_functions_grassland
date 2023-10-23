@@ -46,6 +46,7 @@ This project is licensed under the terms of the Creative Commons Attribution 4.0
 For the next update, following new datasets can be included (need to be checked if actually fitting):
 - Arthropods (core) project
   - Dung and seed depletion (only VIPs), e.g. in 2020 (30938)
+  - temporal arthropod dataset (see BetaDivMultifun notes)
 - SCALEMIC
   - Soil enzyme activities of all grassland EPs, soil sampling campaign (SSC) 2017, SCALEMIC (26147)
   - Physico-chemical soil properties 2017 (25586)
@@ -56,3 +57,4 @@ For the next update, following new datasets can be included (need to be checked 
 - Dung removal and NO3.2004 have negative values, because different dung types were scaled in order to aggregate them. --> In future, think about how to avoid negative values. (units are e.g. g/m^2). Note (2023) : in the forest functions dataset, values were scaled with scale(..., center = F, scale = T) i.e. were not centered, but scaled which lead to values > 0 (for input values >0)
 - Soil respiration 2018 and 2019, Apostolakis, Schöning, Schrumpf, Klötzing, Trumbore
 - Soil-depth was added, could not be added to BExIS yet but please add at next update (once the data structure can be added)
+- PRI and NRI do NOT contain any root nutrient measure (no root P and no root N). Check if this is available in BExIS and if yes, include to NRI and PRI variable. Note : (1) maybe Norbert Hölzl measured it (maybe just in VIPs or MIPs?) (2) maybe calculate PRI with root data and check how correlated it is with incomplete PRI
