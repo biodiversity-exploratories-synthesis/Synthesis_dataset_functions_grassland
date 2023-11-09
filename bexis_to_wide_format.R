@@ -4,7 +4,7 @@
 #
 #####################################
 # by Noelle Schenk
-# last edit : 05.01.22
+# last edit : 09.11.23
 
 ##
 # goals of the script : 
@@ -83,3 +83,4 @@ plot(synth_func[, Soil.C.stock], original_synth_func[!Soil_C_stock %in% "NM", So
 ##
 # save reformatted file
 fwrite(synth_func, file = "bexis_to_wide_format_output.txt", sep = ";")
+fwrite(synth_func, file = "bexis_to_wide_format_output.csv", sep = ";")
