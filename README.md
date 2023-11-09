@@ -3,7 +3,7 @@ Released at Zenodo : [![DOI](https://zenodo.org/badge/181692075.svg)](https://ze
 
 former name : 2019_grassland_functions
 
-Code used for generation of the synthesis grassland function dataset [BExIS ID 27087](https://www.bexis.uni-jena.de/ddm/data/showdata/27087).
+Code used for generation of the synthesis grassland function dataset [BExIS ID 31621](https://www.bexis.uni-jena.de/ddm/data/showdata/31621) , former : [BExIS ID 27087](https://www.bexis.uni-jena.de/ddm/data/showdata/27087).
 
 ### License
 
@@ -11,6 +11,7 @@ This project is licensed under the terms of the Creative Commons Attribution 4.0
 
 # Versions
 
+- Nov 2023 : Re-naming ID from 27087 to 31621.
 - March 2023 Major update (in dataset) : Error in Biomass data found : in assembled biomass dataset 31448, 2014 was completely wrong, plus smaller errors found in : 2018 (9 plots in HAI) and 2019 (very small differences in some HAI and some SCH plots).
   The assembled biomass was not used for the functions dataset, thus the 2014 error did not affect this grassland functions dataset 27087. But the other years are corrected with the new dataset 31448. The Biomass years 2009 - 2017 were taken from 31448 now, instead of taking the individual years (because the small errors were not corrected in the individual years). Thus, the citations strings were updated as well, adding the assembled dataset 31448 as source while keeping the individual year's sources as well.
 
